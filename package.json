@@ -1,5 +1,5 @@
 {
-  "name": "teste-deslocamento",
+  "name": "base-next",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.5",
     "next": "12.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
