@@ -1,8 +1,8 @@
-import { styled } from '@mui/system';
+import styled from '@emotion/styled';
 
-export const MyComponent = styled('div')({
-  backgroundColor: 'aliceblue',
-  padding: 8,
-  borderRadius: 4,
-  border: '2px solid #0f0',
-});
+export const MyComponent = styled.div`
+  background-color: #0f0;
+  padding: 38px;
+  border-radius: 4px;
+  border: 2px solid #0df;
+`;
