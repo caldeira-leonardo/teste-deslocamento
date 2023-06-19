@@ -1,16 +1,32 @@
 import { createTheme } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
+import { red, blue, green, orange, yellow } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0f0',
+      main: '#5df1d1',
+      contrastText: '#202020',
     },
     secondary: {
-      main: '#19857b',
+      main: '#080c22',
+      contrastText: '#f0f0f0',
     },
     error: {
-      main: red.A400,
+      main: '#f44336',
+    },
+    warning: {
+      main: '#fff535',
+    },
+    background: {
+      default: '#f0f0f0',
+    },
+    success: {
+      main: '#5df1d1',
+    },
+    text: {
+      primary: '#696969',
+      disabled: '#b6b6b6',
+      secondary: '#202020',
     },
   },
 });
