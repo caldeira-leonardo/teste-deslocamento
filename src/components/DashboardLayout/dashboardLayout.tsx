@@ -1,7 +1,4 @@
 import Menu from '@/src/components/Menu/menu';
-import { useMemo } from 'react';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import {
   DashboardChildren,
   DashboardContainer,
@@ -17,8 +14,6 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = (props: DashboardLayoutProps) => {
   const { children, title } = props;
-  const routerPath = useRouter().asPath;
-  const path = useMemo(() => routerPath, []);
 
   return (
     <DashboardWrapper sx={{ display: { xs: 'block', md: 'grid' } }}>

@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { colors } from '@/styles/colors';
 import { Box } from '@mui/material';
 
 export const DashboardWrapper = styled(Box)`

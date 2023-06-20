@@ -95,10 +95,10 @@ export default Menu;
 
 const menuList = [
   {
-    name: 'Cliente',
+    name: 'Clientes',
     icon: <ContactsRoundedIcon />,
     onClick: () => console.log('Cliente'),
-    path: '/cliente',
+    path: '/clientes',
   },
   {
     name: 'Condutores',
