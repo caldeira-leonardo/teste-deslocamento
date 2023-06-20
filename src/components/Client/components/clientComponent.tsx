@@ -4,7 +4,8 @@ import Button from '@/src/components/elements/Button/Button';
 import CustomModal from '../../elements/Modal/modal';
 import ClientForm from './clientForm';
 
-const ClientesComponent = () => {
+const ClientesComponent = (props: any) => {
+  const { getUserLocationData } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = React.useState(false);
 
@@ -23,7 +24,10 @@ const ClientesComponent = () => {
         onClose={() => setIsOpen(false)}
         onConfirm={() => setIsOpen(false)}
       >
-        <ClientForm submit={() => console.log('click submit')} />
+        <ClientForm
+          submit={() => console.log('click submit')}
+          getUserLocationData={getUserLocationData}
+        />
       </CustomModal>
       <ConfirmationModal
         isOpen={isConfirmationOpen}

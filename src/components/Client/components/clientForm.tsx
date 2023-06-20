@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
-import { ClientFormWrapper } from './styleClient';
+import { ClientFormWrapper, LogradouroWrapper } from './styleClient';
+import api from '@/src/api/buscaCep';
 
 interface ClientFormProps {
   client?: ClientProps;
   submit(values: ClientProps): void;
+  getUserLocationData(cep: string): RespondeCepProps;
 }
 
 interface ClientProps {
@@ -18,20 +20,35 @@ interface ClientProps {
   bairro?: string;
   cidade?: string;
   uf?: string;
+  cep?: string;
+}
+
+interface RespondeCepProps {
+  bairro: string;
+  cep: string;
+  complemento: string;
+  ddd: string;
+  gia: string;
+  ibge: string;
+  localidade: string;
+  logradouro: string;
+  siafi: string;
+  uf: string;
 }
 
 const ClientForm = (props: ClientFormProps) => {
-  const { submit } = props;
+  const { submit, getUserLocationData } = props;
+  const [loading, setLoading] = useState<boolean>(false);
   const formik = useFormik<ClientProps>({
     initialValues: {
       nome: '',
-      numeroDocumento: 'string',
-      tipoDocumento: 'string',
-      logradouro: 'string',
-      numero: 'string',
-      bairro: 'string',
-      cidade: 'string',
-      uf: 'string',
+      numeroDocumento: '',
+      tipoDocumento: '',
+      logradouro: '',
+      numero: '',
+      bairro: '',
+      cidade: '',
+      uf: '',
     },
     enableReinitialize: true,
     validationSchema: Yup.object().shape({
@@ -49,6 +66,21 @@ const ClientForm = (props: ClientFormProps) => {
       formik.resetForm();
     },
   });
+
+  const handleChangeLocation = (data: RespondeCepProps) => {
+    formik.setFieldValue('logradouro', data?.logradouro);
+    formik.setFieldValue('cidade', data?.localidade);
+    formik.setFieldValue('uf', data?.uf);
+    formik.setFieldValue('bairro', data?.bairro);
+    formik.setFieldValue('cep', data?.cep);
+  };
+
+  useMemo(async () => {
+    if (formik.values.cep) {
+      const cepData = await getUserLocationData(formik.values.cep);
+      handleChangeLocation(cepData);
+    }
+  }, [formik.values.cep]);
 
   return (
     <ClientFormWrapper>
@@ -77,21 +109,33 @@ const ClientForm = (props: ClientFormProps) => {
         formik={formik}
       />
       <Input
-        label="Logradouro"
+        label="CEP"
         variant="outlined"
         color="secondary"
         fullWidth
-        id="logradouro"
+        id="cep"
         formik={formik}
       />
-      <Input
-        label="Numero"
-        variant="outlined"
-        color="secondary"
-        fullWidth
-        id="numero"
-        formik={formik}
-      />
+      <LogradouroWrapper sx={{ display: { md: 'grid', xs: 'block' } }}>
+        <Input
+          label="Logradouro"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          id="logradouro"
+          formik={formik}
+          sx={{ gridArea: 'logradouro' }}
+        />
+        <Input
+          label="Nº"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          id="numero"
+          formik={formik}
+          sx={{ gridArea: 'numero', marginTop: { sm: '10px', md: 0 } }}
+        />
+      </LogradouroWrapper>
       <Input
         label="Bairro"
         variant="outlined"

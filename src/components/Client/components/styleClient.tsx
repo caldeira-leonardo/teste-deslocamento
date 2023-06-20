@@ -9,3 +9,10 @@ export const ClientFormWrapper = styled(Box)`
   grid-template-columns: 1fr;
   gap: 10px;
 `;
+
+export const LogradouroWrapper = styled(Box)`
+  grid-template-columns: 1fr 80px;
+  gap: 20px;
+
+  grid-template-areas: 'logradouro numero';
+`;
