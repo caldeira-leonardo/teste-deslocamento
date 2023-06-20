@@ -5,4 +5,8 @@ export const MyComponent = styled.div`
   padding: 38px;
   border-radius: 4px;
   border: 2px solid #0df;
+
+  .teste {
+    background-color: #00f;
+  }
 `;
