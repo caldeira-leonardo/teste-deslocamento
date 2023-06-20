@@ -1,20 +1,17 @@
-import {
-  IconButton,
-  Toolbar,
-  Drawer,
-  ListItemText,
-  Typography,
-  Box,
-  colors,
-} from '@mui/material';
 import ContactsRoundedIcon from '@mui/icons-material/ContactsRounded';
 import LocalShippingRoundedIcon from '@mui/icons-material/LocalShippingRounded';
 import PersonPinCircleRoundedIcon from '@mui/icons-material/PersonPinCircleRounded';
 import AirlineSeatReclineExtraRoundedIcon from '@mui/icons-material/AirlineSeatReclineExtraRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import EmojiTransportationRoundedIcon from '@mui/icons-material/EmojiTransportationRounded';
-
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+import {
+  IconButton,
+  Drawer,
+  ListItemText,
+  Typography,
+  Box,
+} from '@mui/material';
 import {
   IconContainer,
   ItemWrapper,
@@ -22,46 +19,31 @@ import {
   MenuListWrapper,
   ToolBarCustom,
 } from './styleMenu';
+import Link from 'next/link';
 
-const Menu = (props: any) => {
+const Menu = () => {
+  const path = useRouter().asPath;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => {
     setIsOpen((value) => !value);
   };
 
-  const list = [
-    {
-      name: 'Cliente',
-      icon: <ContactsRoundedIcon />,
-      onClick: () => console.log('Cliente'),
-    },
-    {
-      name: 'Condutores',
-      icon: <AirlineSeatReclineExtraRoundedIcon />,
-      onClick: () => console.log('Condutores'),
-    },
-    {
-      name: 'Deslocamento',
-      icon: <PersonPinCircleRoundedIcon />,
-      onClick: () => console.log('Deslocamento'),
-    },
-    {
-      name: 'Veiculos',
-      icon: <LocalShippingRoundedIcon />,
-      onClick: () => console.log('Veiculos'),
-    },
-  ];
-
   const ListWrapperElement = () => {
     return (
       <ListWrapper>
-        {list.map((item) => {
+        {menuList.map((item) => {
           return (
-            <ItemWrapper onClick={item.onClick} key={item.name}>
-              <IconContainer>{item.icon}</IconContainer>
-              <ListItemText>{item.name}</ListItemText>
-            </ItemWrapper>
+            <Link key={item.name} href={item.path}>
+              <ItemWrapper
+                onClick={item.onClick}
+                key={item.name}
+                className={`${path.includes(item.path) ? 'active' : ''}`}
+              >
+                <IconContainer>{item.icon}</IconContainer>
+                <ListItemText>{item.name}</ListItemText>
+              </ItemWrapper>
+            </Link>
           );
         })}
       </ListWrapper>
@@ -110,3 +92,30 @@ const Menu = (props: any) => {
 };
 
 export default Menu;
+
+const menuList = [
+  {
+    name: 'Cliente',
+    icon: <ContactsRoundedIcon />,
+    onClick: () => console.log('Cliente'),
+    path: '/cliente',
+  },
+  {
+    name: 'Condutores',
+    icon: <AirlineSeatReclineExtraRoundedIcon />,
+    onClick: () => console.log('Condutores'),
+    path: '/condutores',
+  },
+  {
+    name: 'Deslocamento',
+    icon: <PersonPinCircleRoundedIcon />,
+    onClick: () => console.log('Deslocamento'),
+    path: '/deslocamento',
+  },
+  {
+    name: 'Veiculos',
+    icon: <LocalShippingRoundedIcon />,
+    onClick: () => console.log('Veiculos'),
+    path: '/veiculos',
+  },
+];
