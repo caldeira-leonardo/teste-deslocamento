@@ -5,4 +5,5 @@ export const colors = {
   textSecondary: '#202020',
   textLight: '#f2f2f2',
   textDisabled: '#b6b6b6',
+  error: '#f44336',
 };

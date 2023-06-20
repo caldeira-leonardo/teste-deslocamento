@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const ModalWrapper = styled(Box)`
-  width: min-content;
+  /* width: min-content; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,7 @@ export const ModalWrapper = styled(Box)`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 2px;
+  box-sizing: border-box;
 `;
 
 export const ModalContentWrapper = styled(Box)`
@@ -20,7 +20,10 @@ export const ModalContentWrapper = styled(Box)`
   padding: 20px;
   background-color: ${colors.textLight};
   border-radius: 12px;
-  min-width: 400px;
+  width: max-content;
+  box-sizing: border-box;
+  overflow: auto;
+  max-height: 90vh;
 `;
 
 export const MainIconWrapper = styled(Box)`
