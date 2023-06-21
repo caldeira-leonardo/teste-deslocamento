@@ -23,7 +23,7 @@ export const ModalContentWrapper = styled(Box)`
   width: max-content;
   box-sizing: border-box;
   overflow: auto;
-  max-height: 90vh;
+  max-height: 95vh;
 `;
 
 export const MainIconWrapper = styled(Box)`

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import ConfirmationModal from '@/src/components/elements/Modal/confirmationModal';
 import CustomModal from '@/src/components/elements/Modal/modal';
 import CustomizedTable from '@/src/components/elements/Table/Table';
@@ -11,6 +11,7 @@ import {
 } from './styleClient';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface ClientesComponentProps {
   getUserLocationData(cep: string): RespondeCepProps;
@@ -19,6 +20,7 @@ interface ClientesComponentProps {
   handleSelectClient(id: string): void;
   handleDeleteClient(id: string): void;
   clients?: ClientProps[];
+  selectedClient?: ClientProps;
 }
 
 const ClientesComponent = (props: ClientesComponentProps) => {
@@ -29,6 +31,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
     clients,
     handleSelectClient,
     handleDeleteClient,
+    selectedClient,
   } = props;
   const [isOpen, setIsOpen] = useState<string>('');
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -39,10 +42,23 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         ...client,
         actions: (
           <ActionsWrapper>
+            <ActionIcon
+              onClick={() => {
+                handleSelectClient(String(client?.id));
+                setIsOpen('View');
+              }}
+            >
+              <VisibilityIcon />
+            </ActionIcon>
             <ActionIcon onClick={() => handleDeleteClient(String(client?.id))}>
               <DeleteForeverIcon />
             </ActionIcon>
-            <ActionIcon onClick={() => handleSelectClient(String(client?.id))}>
+            <ActionIcon
+              onClick={() => {
+                handleSelectClient(String(client?.id));
+                setIsOpen('Edit');
+              }}
+            >
               <ModeEditOutlineIcon />
             </ActionIcon>
           </ActionsWrapper>
@@ -77,14 +93,15 @@ const ClientesComponent = (props: ClientesComponentProps) => {
       />
 
       <CustomModal
-        isOpen={['Create', 'Edit'].includes(isOpen)}
+        isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
         title="Adicionar novo cliente"
         onCancel={() => setIsOpen('')}
         onClose={() => setIsOpen('')}
       >
         <ClientForm
-          {...{ getUserLocationData, loading, submit }}
+          {...{ getUserLocationData, loading, submit, selectedClient }}
           handleClose={() => setIsOpen('')}
+          type={isOpen}
         />
       </CustomModal>
       <ConfirmationModal

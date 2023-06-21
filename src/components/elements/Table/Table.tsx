@@ -37,7 +37,7 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
               {columns.map((column: string, i: number) => (
@@ -54,6 +54,11 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
                   {columns.map((column: any, i: number) => {
                     return (
                       <StyledTableCell
+                        sx={{
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
                         align={i !== 0 ? 'right' : 'left'}
                         key={i}
                         onClick={() => onSelect(row.id)}

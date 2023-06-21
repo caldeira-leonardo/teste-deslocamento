@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import * as Yup from 'yup';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
@@ -7,10 +7,11 @@ import api from '@/src/api/buscaCep';
 import BottonButtons from '../../elements/Modal/bottomButtons';
 
 interface ClientFormProps {
-  client?: ClientProps;
+  selectedClient?: ClientProps;
   submit(values: ClientProps): void;
   getUserLocationData(cep: string): RespondeCepProps;
   handleClose(): void;
+  type: string;
 }
 
 export interface ClientProps {
@@ -40,35 +41,52 @@ export interface RespondeCepProps {
 }
 
 const ClientForm = (props: ClientFormProps) => {
-  const { submit, getUserLocationData, handleClose } = props;
+  const {
+    submit,
+    getUserLocationData,
+    handleClose,
+    selectedClient,
+    type,
+  } = props;
   const [loading, setLoading] = useState<boolean>(false);
+  const numberPattern = /\d+/g;
+
+  useEffect(() => {
+    console.log('selectedClient', selectedClient); //TODO remove log
+  }, [selectedClient]);
+
   const formik = useFormik<ClientProps>({
     initialValues: {
-      nome: '',
-      numeroDocumento: '',
-      tipoDocumento: '',
-      cep: '',
-      logradouro: '',
-      numero: '',
-      bairro: '',
-      cidade: '',
-      uf: '',
+      nome: selectedClient?.nome || '',
+      numeroDocumento: selectedClient?.numeroDocumento || '',
+      tipoDocumento: selectedClient?.tipoDocumento || '',
+      cep: selectedClient?.cep || '',
+      logradouro: selectedClient?.logradouro || '',
+      numero: selectedClient?.numero || '',
+      bairro: selectedClient?.bairro || '',
+      cidade: selectedClient?.cidade || '',
+      uf: selectedClient?.uf || '',
     },
     enableReinitialize: true,
     validationSchema: Yup.object().shape({
       nome: Yup.string().required('Campo obligatorio'),
-      numeroDocumento: Yup.string().required('Campo obligatorio'),
+      numeroDocumento: Yup.string()
+        .matches(/^\d+$/, 'Digite somente números')
+        .required('Campo obligatorio'),
       tipoDocumento: Yup.string().required('Campo obligatorio'),
-      cep: Yup.string().max(10),
+      cep: Yup.string()
+        .matches(/^\d+$/, 'Digite somente números')
+        .max(10, 'Só é aceito 10 caracteres'),
       logradouro: Yup.string(),
       numero: Yup.string(),
       bairro: Yup.string(),
       cidade: Yup.string(),
       uf: Yup.string(),
     }),
-    onSubmit: (values) => {
-      submit(values);
+    onSubmit: async (values) => {
+      await submit(values);
       formik.resetForm();
+      handleClose();
     },
   });
 
@@ -77,7 +95,7 @@ const ClientForm = (props: ClientFormProps) => {
     formik.setFieldValue('cidade', data?.localidade);
     formik.setFieldValue('uf', data?.uf);
     formik.setFieldValue('bairro', data?.bairro);
-    formik.setFieldValue('cep', data?.cep.replace('-', ''));
+    formik.setFieldValue('cep', data?.cep?.replace('-', ''));
   };
 
   useMemo(async () => {
@@ -98,6 +116,7 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="nome"
           formik={formik}
+          disabled={type === 'View'}
         />
         <Input
           label="Numero do documento"
@@ -105,8 +124,8 @@ const ClientForm = (props: ClientFormProps) => {
           color="secondary"
           fullWidth
           id="numeroDocumento"
-          type="number"
           formik={formik}
+          disabled={type === 'View'}
         />
         <Input
           label="Tipo do documento"
@@ -115,6 +134,7 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="tipoDocumento"
           formik={formik}
+          disabled={type === 'View'}
         />
         <Input
           label="CEP"
@@ -123,8 +143,8 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="cep"
           placeholder="somente números"
-          type="number"
           formik={formik}
+          disabled={type === 'View'}
         />
         <LogradouroWrapper sx={{ display: { md: 'grid', xs: 'block' } }}>
           <Input
@@ -134,6 +154,7 @@ const ClientForm = (props: ClientFormProps) => {
             fullWidth
             id="logradouro"
             formik={formik}
+            disabled={type === 'View'}
             sx={{ gridArea: 'logradouro' }}
           />
           <Input
@@ -143,6 +164,7 @@ const ClientForm = (props: ClientFormProps) => {
             fullWidth
             id="numero"
             formik={formik}
+            disabled={type === 'View'}
             sx={{ gridArea: 'numero', marginTop: { sm: '10px', md: 0 } }}
           />
         </LogradouroWrapper>
@@ -153,6 +175,7 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="bairro"
           formik={formik}
+          disabled={type === 'View'}
         />
         <Input
           label="Cidade"
@@ -161,6 +184,7 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="cidade"
           formik={formik}
+          disabled={type === 'View'}
         />
         <Input
           label="UF"
@@ -169,9 +193,14 @@ const ClientForm = (props: ClientFormProps) => {
           fullWidth
           id="uf"
           formik={formik}
+          disabled={type === 'View'}
         />
       </ClientFormWrapper>
-      <BottonButtons onClose={handleClose} onConfirm={formik.handleSubmit} />
+      <BottonButtons
+        onClose={handleClose}
+        onConfirm={formik.handleSubmit}
+        disabled={type === 'View'}
+      />
     </>
   );
 };

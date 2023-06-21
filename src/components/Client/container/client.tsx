@@ -26,7 +26,7 @@ const Client = () => {
   };
 
   const submit = async (values: ClientProps) => {
-    postClientsData(values);
+    await postClientsData(values);
     getClients();
   };
 
@@ -36,12 +36,13 @@ const Client = () => {
   };
 
   const handleSelectClient = (clientId: string | number) => {
-    const clientSelected = clients.filter((client) => client.id == clientId)[0];
+    const clientSelected = clients.filter((client) => {
+      return client.id === clientId;
+    })[0];
     setSelectedClient(clientSelected);
   };
 
   const handleDeleteClient = async (clientId: string | number) => {
-    console.log('entrou aqui', clientId); //TODO remove logs
     await deleteClientsData(clientId);
     getClients();
   };

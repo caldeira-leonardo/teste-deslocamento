@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache, Global, css } from '@emotion/react';
 import theme from '../styles/theme';
 import createEmotionCache from '@/src/utils/createEmotionCache';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -24,6 +26,18 @@ export default function MyApp(props: MyAppProps) {
         <Global styles={styles} />
         <CssBaseline />
         <Component {...pageProps} />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </ThemeProvider>
     </CacheProvider>
   );
