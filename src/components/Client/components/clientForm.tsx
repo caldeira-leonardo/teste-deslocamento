@@ -3,7 +3,6 @@ import * as Yup from 'yup';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
 import { ClientFormWrapper, LogradouroWrapper } from './styleClient';
-import api from '@/src/api/buscaCep';
 import BottonButtons from '../../elements/Modal/bottomButtons';
 
 interface ClientFormProps {
@@ -12,6 +11,7 @@ interface ClientFormProps {
   getUserLocationData(cep: string): RespondeCepProps;
   handleClose(): void;
   type: string;
+  resetSelectUser(): void;
 }
 
 export interface ClientProps {
@@ -47,6 +47,7 @@ const ClientForm = (props: ClientFormProps) => {
     handleClose,
     selectedClient,
     type,
+    resetSelectUser,
   } = props;
 
   const formik = useFormik<ClientProps>({
@@ -192,7 +193,10 @@ const ClientForm = (props: ClientFormProps) => {
         />
       </ClientFormWrapper>
       <BottonButtons
-        onClose={handleClose}
+        onClose={() => {
+          handleClose();
+          resetSelectUser();
+        }}
         onConfirm={formik.handleSubmit}
         disabled={type === 'View'}
       />

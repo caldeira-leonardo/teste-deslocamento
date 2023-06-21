@@ -26,6 +26,20 @@ const Client = () => {
     return data;
   };
 
+  const resetSelectUser = () =>
+    setSelectedClient({
+      nome: '',
+      numeroDocumento: '',
+      tipoDocumento: '',
+      bairro: '',
+      cep: '',
+      cidade: '',
+      id: '',
+      logradouro: '',
+      numero: '',
+      uf: '',
+    });
+
   const submit = async (values: ClientProps) => {
     await postClientsData(values);
     getClients();
@@ -33,6 +47,7 @@ const Client = () => {
 
   const edit = async (values: ClientProps) => {
     await patchClientsData(values);
+    resetSelectUser();
     getClients();
   };
 
@@ -68,6 +83,7 @@ const Client = () => {
         selectedClient,
         handleDeleteClient,
         edit,
+        resetSelectUser,
       }}
     />
   );

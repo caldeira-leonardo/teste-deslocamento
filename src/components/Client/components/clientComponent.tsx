@@ -22,6 +22,7 @@ interface ClientesComponentProps {
   handleDeleteClient(id: string): void;
   clients?: ClientProps[];
   selectedClient?: ClientProps;
+  resetSelectUser(): void;
 }
 
 const ClientesComponent = (props: ClientesComponentProps) => {
@@ -34,6 +35,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
     handleDeleteClient,
     selectedClient,
     edit,
+    resetSelectUser,
   } = props;
   const [isOpen, setIsOpen] = useState<string>('');
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -101,7 +103,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         onClose={() => setIsOpen('')}
       >
         <ClientForm
-          {...{ getUserLocationData, loading, selectedClient }}
+          {...{ getUserLocationData, loading, selectedClient, resetSelectUser }}
           submit={isOpen === 'Create' ? submit : edit}
           handleClose={() => setIsOpen('')}
           type={isOpen}
