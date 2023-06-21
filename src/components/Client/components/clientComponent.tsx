@@ -39,10 +39,10 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         ...client,
         actions: (
           <ActionsWrapper>
-            <ActionIcon onClick={() => handleDeleteClient(client.id)}>
+            <ActionIcon onClick={() => handleDeleteClient(String(client?.id))}>
               <DeleteForeverIcon />
             </ActionIcon>
-            <ActionIcon onClick={() => handleSelectClient(client.id)}>
+            <ActionIcon onClick={() => handleSelectClient(String(client?.id))}>
               <ModeEditOutlineIcon />
             </ActionIcon>
           </ActionsWrapper>
