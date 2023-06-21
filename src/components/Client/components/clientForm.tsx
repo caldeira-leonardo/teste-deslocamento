@@ -48,12 +48,6 @@ const ClientForm = (props: ClientFormProps) => {
     selectedClient,
     type,
   } = props;
-  const [loading, setLoading] = useState<boolean>(false);
-  const numberPattern = /\d+/g;
-
-  useEffect(() => {
-    console.log('selectedClient', selectedClient); //TODO remove log
-  }, [selectedClient]);
 
   const formik = useFormik<ClientProps>({
     initialValues: {
@@ -66,6 +60,7 @@ const ClientForm = (props: ClientFormProps) => {
       bairro: selectedClient?.bairro || '',
       cidade: selectedClient?.cidade || '',
       uf: selectedClient?.uf || '',
+      id: selectedClient?.id || '',
     },
     enableReinitialize: true,
     validationSchema: Yup.object().shape({

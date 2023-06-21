@@ -5,6 +5,7 @@ import { ClientProps } from '../components/clientForm';
 import {
   deleteClientsData,
   getClientsData,
+  patchClientsData,
   postClientsData,
 } from '@/src/api/Deslocamento/clients';
 
@@ -27,6 +28,11 @@ const Client = () => {
 
   const submit = async (values: ClientProps) => {
     await postClientsData(values);
+    getClients();
+  };
+
+  const edit = async (values: ClientProps) => {
+    await patchClientsData(values);
     getClients();
   };
 
@@ -61,6 +67,7 @@ const Client = () => {
         handleSelectClient,
         selectedClient,
         handleDeleteClient,
+        edit,
       }}
     />
   );

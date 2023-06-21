@@ -17,6 +17,7 @@ interface ClientesComponentProps {
   getUserLocationData(cep: string): RespondeCepProps;
   loading: boolean;
   submit(values: ClientProps): void;
+  edit(values: ClientProps): void;
   handleSelectClient(id: string): void;
   handleDeleteClient(id: string): void;
   clients?: ClientProps[];
@@ -32,6 +33,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
     handleSelectClient,
     handleDeleteClient,
     selectedClient,
+    edit,
   } = props;
   const [isOpen, setIsOpen] = useState<string>('');
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -99,7 +101,8 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         onClose={() => setIsOpen('')}
       >
         <ClientForm
-          {...{ getUserLocationData, loading, submit, selectedClient }}
+          {...{ getUserLocationData, loading, selectedClient }}
+          submit={isOpen === 'Create' ? submit : edit}
           handleClose={() => setIsOpen('')}
           type={isOpen}
         />
