@@ -36,7 +36,6 @@ const Menu = () => {
           return (
             <Link key={item.name} href={item.path}>
               <ItemWrapper
-                onClick={item.onClick}
                 key={item.name}
                 className={`${path.includes(item.path) ? 'active' : ''}`}
               >
@@ -77,6 +76,7 @@ const Menu = () => {
             backgroundColor: 'transparent',
             border: '1px solid #080c22',
           },
+          elevation: 0,
         }}
       >
         <MenuListWrapper style={{ borderRadius: 0 }}>
@@ -97,25 +97,21 @@ const menuList = [
   {
     name: 'Clientes',
     icon: <ContactsRoundedIcon />,
-    onClick: () => console.log('Cliente'),
     path: '/clientes',
   },
   {
     name: 'Condutores',
     icon: <AirlineSeatReclineExtraRoundedIcon />,
-    onClick: () => console.log('Condutores'),
     path: '/condutores',
   },
   {
     name: 'Deslocamento',
     icon: <PersonPinCircleRoundedIcon />,
-    onClick: () => console.log('Deslocamento'),
     path: '/deslocamento',
   },
   {
     name: 'Veiculos',
     icon: <LocalShippingRoundedIcon />,
-    onClick: () => console.log('Veiculos'),
     path: '/veiculos',
   },
 ];

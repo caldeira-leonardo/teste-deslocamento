@@ -39,7 +39,6 @@ const Input = (props: InputProps) => {
       <TextField
         {...props}
         {...formikProps}
-        defaultValue={formik.values[id]}
         variant="outlined"
         onChange={(e) => formik.setFieldValue(id, e.target.value)}
         onBlur={handleBlur}

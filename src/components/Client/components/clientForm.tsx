@@ -14,6 +14,7 @@ interface ClientFormProps {
 }
 
 export interface ClientProps {
+  id?: number | string;
   nome: string;
   numeroDocumento: string;
   tipoDocumento: string;

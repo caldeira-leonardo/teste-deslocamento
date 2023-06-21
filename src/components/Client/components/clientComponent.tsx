@@ -1,37 +1,90 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import ConfirmationModal from '@/src/components/elements/Modal/confirmationModal';
-import Button from '@/src/components/elements/Button/Button';
-import CustomModal from '../../elements/Modal/modal';
+import CustomModal from '@/src/components/elements/Modal/modal';
+import CustomizedTable from '@/src/components/elements/Table/Table';
 import ClientForm, { ClientProps, RespondeCepProps } from './clientForm';
+import {
+  ActionIcon,
+  ActionsWrapper,
+  AddClientButton,
+  ClientWrapper,
+} from './styleClient';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 
 interface ClientesComponentProps {
   getUserLocationData(cep: string): RespondeCepProps;
   loading: boolean;
   submit(values: ClientProps): void;
+  handleSelectClient(id: string): void;
+  handleDeleteClient(id: string): void;
+  clients?: ClientProps[];
 }
 
 const ClientesComponent = (props: ClientesComponentProps) => {
-  const { getUserLocationData, loading, submit } = props;
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isConfirmationOpen, setIsConfirmationOpen] = React.useState(false);
+  const {
+    getUserLocationData,
+    loading,
+    submit,
+    clients,
+    handleSelectClient,
+    handleDeleteClient,
+  } = props;
+  const [isOpen, setIsOpen] = useState<string>('');
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  const clientsData = useMemo(() => {
+    return clients?.map((client) => {
+      return {
+        ...client,
+        actions: (
+          <ActionsWrapper>
+            <ActionIcon onClick={() => handleDeleteClient(client.id)}>
+              <DeleteForeverIcon />
+            </ActionIcon>
+            <ActionIcon onClick={() => handleSelectClient(client.id)}>
+              <ModeEditOutlineIcon />
+            </ActionIcon>
+          </ActionsWrapper>
+        ),
+      };
+    });
+  }, [clients]);
 
   return (
-    <div>
-      <Button onClick={() => setIsOpen(true)}>Open modal</Button>
-      <Button onClick={() => setIsConfirmationOpen(true)}>
+    <ClientWrapper>
+      <AddClientButton onClick={() => setIsOpen('Create')}>
+        Adicionar Cliente
+      </AddClientButton>
+      {/* <Button onClick={() => setIsConfirmationOpen(true)}>
         Open Confirmation modal
-      </Button>
-      <a href="/link">asdasdasdad</a>
+      </Button> */}
+
+      <CustomizedTable
+        columns={[
+          'numeroDocumento',
+          'tipoDocumento',
+          'nome',
+          'logradouro',
+          'numero',
+          'bairro',
+          'cidade',
+          'uf',
+          'actions',
+        ]}
+        rows={clientsData}
+        onSelect={handleSelectClient}
+      />
 
       <CustomModal
-        isOpen={isOpen}
+        isOpen={['Create', 'Edit'].includes(isOpen)}
         title="Adicionar novo cliente"
-        onCancel={() => setIsOpen(false)}
-        onClose={() => setIsOpen(false)}
+        onCancel={() => setIsOpen('')}
+        onClose={() => setIsOpen('')}
       >
         <ClientForm
           {...{ getUserLocationData, loading, submit }}
-          handleClose={() => setIsOpen(false)}
+          handleClose={() => setIsOpen('')}
         />
       </CustomModal>
       <ConfirmationModal
@@ -41,7 +94,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         title="Você irá remover os dados"
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
-    </div>
+    </ClientWrapper>
   );
 };
 
