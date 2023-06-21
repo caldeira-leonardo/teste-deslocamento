@@ -2,10 +2,16 @@ import React from 'react';
 import ConfirmationModal from '@/src/components/elements/Modal/confirmationModal';
 import Button from '@/src/components/elements/Button/Button';
 import CustomModal from '../../elements/Modal/modal';
-import ClientForm from './clientForm';
+import ClientForm, { ClientProps, RespondeCepProps } from './clientForm';
 
-const ClientesComponent = (props: any) => {
-  const { getUserLocationData } = props;
+interface ClientesComponentProps {
+  getUserLocationData(cep: string): RespondeCepProps;
+  loading: boolean;
+  submit(values: ClientProps): void;
+}
+
+const ClientesComponent = (props: ClientesComponentProps) => {
+  const { getUserLocationData, loading, submit } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = React.useState(false);
 
@@ -22,11 +28,10 @@ const ClientesComponent = (props: any) => {
         title="Adicionar novo cliente"
         onCancel={() => setIsOpen(false)}
         onClose={() => setIsOpen(false)}
-        onConfirm={() => setIsOpen(false)}
       >
         <ClientForm
-          submit={() => console.log('click submit')}
-          getUserLocationData={getUserLocationData}
+          {...{ getUserLocationData, loading, submit }}
+          handleClose={() => setIsOpen(false)}
         />
       </CustomModal>
       <ConfirmationModal

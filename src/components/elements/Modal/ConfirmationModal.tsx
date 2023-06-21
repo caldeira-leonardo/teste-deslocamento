@@ -29,12 +29,12 @@ const ConfirmationModal = ({
     <Modal open={isOpen} onClose={onClose}>
       <ModalWrapper>
         <ModalContentWrapper>
+          <CloseIconButton onClick={onClose} />
           <MainIconWrapper>
             <DeleteIcon style={{ fontSize: '50px', color: '#f44336' }} />
           </MainIconWrapper>
           <h2 style={{ textAlign: 'center' }}>{title}</h2>
           <h4 style={{ textAlign: 'center' }}>{description}</h4>
-          <CloseIconButton onClick={onClose} />
           <BottomIcons>
             <Button color="error" onClick={onClose}>
               Cancelar

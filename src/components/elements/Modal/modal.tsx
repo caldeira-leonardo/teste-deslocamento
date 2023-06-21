@@ -13,7 +13,6 @@ import Button from '../Button/Button';
 interface CustomModalProps {
   isOpen: boolean;
   onClose(): void;
-  onConfirm(): void;
   onCancel(): void;
   title: string;
   children: React.ReactNode;
@@ -23,15 +22,8 @@ const CustomModal = ({
   isOpen,
   onClose,
   title,
-  onCancel,
-  onConfirm,
   children,
 }: CustomModalProps) => {
-  const handleCancel = () => {
-    onCancel();
-    onClose();
-  };
-
   return (
     <Modal open={isOpen} onClose={onClose}>
       <ModalWrapper>
@@ -40,14 +32,6 @@ const CustomModal = ({
           <h3>{title}</h3>
           <Divider />
           {children}
-          <BottomIcons>
-            <Button color="error" onClick={handleCancel}>
-              Cancelar
-            </Button>
-            <Button onClick={onConfirm} style={{ marginLeft: '20px' }}>
-              Confirmar
-            </Button>
-          </BottomIcons>
         </ModalContentWrapper>
       </ModalWrapper>
     </Modal>

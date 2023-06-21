@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ClientesComponent from '../components/clientComponent';
-import api from '@/src/api/buscaCep';
+import buscaCepApi from '@/src/api/buscaCep';
+import { ClientProps } from '../components/clientForm';
+import deslocamentoApi from '@/src/api/deslocamento';
 
 const Client = () => {
-  const getUserLocationData = async (cep: string) => {
-    const data = await api
+  const [loading, setLoading] = useState<boolean>(false);
+  const getUserLocationData: any = async (cep: string) => {
+    const data = await buscaCepApi
       .get(`${cep}/json`)
       .then((res) => {
         return res.data;
@@ -13,11 +16,23 @@ const Client = () => {
         console.log(err);
       });
 
-    console.log('data', data); //TODO remove logs
     return data;
   };
 
-  return <ClientesComponent {...{ getUserLocationData }} />;
+  const submit = async (values: ClientProps) => {
+    const data = await deslocamentoApi
+      .post(`/Cliente`, values)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    console.log('retorno', data);
+  };
+
+  return <ClientesComponent {...{ getUserLocationData, loading, submit }} />;
 };
 
 export default Client;
