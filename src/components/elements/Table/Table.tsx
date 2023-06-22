@@ -10,7 +10,7 @@ import { TablePagination } from '@mui/material';
 
 interface CustomizedTableProps {
   rows: any;
-  columns: any;
+  columns: { key: string; label: string; }[];
   onSelect(id: string): void;
 }
 
@@ -40,9 +40,9 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              {columns.map((column: string, i: number) => (
+              {columns.map((column, i: number) => (
                 <StyledTableCell key={i} align={i !== 0 ? 'right' : 'left'}>
-                  {column}
+                  {column.label}
                 </StyledTableCell>
               ))}
             </TableRow>
@@ -51,7 +51,7 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
             {visibleRows.map((row: any, index: number) => {
               return (
                 <StyledTableRow key={index}>
-                  {columns.map((column: any, i: number) => {
+                  {columns.map((column, i: number) => {
                     return (
                       <StyledTableCell
                         sx={{
@@ -63,7 +63,7 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
                         key={i}
                         onClick={() => onSelect(row.id)}
                       >
-                        {row[`${column}`]}
+                        {row[`${column.key}`]}
                       </StyledTableCell>
                     );
                   })}

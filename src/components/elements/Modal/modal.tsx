@@ -27,7 +27,7 @@ const CustomModal = ({
   return (
     <Modal open={isOpen} onClose={onClose}>
       <ModalWrapper>
-        <ModalContentWrapper>
+        <ModalContentWrapper sx={{ width: { xs: '90vw', md: '50vw' } }}>
           <CloseIconButton onClick={onClose} />
           <h3>{title}</h3>
           <Divider />

@@ -13,6 +13,7 @@ export const ModalWrapper = styled(Box)`
   left: 50%;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
+  outline: none;
 `;
 
 export const ModalContentWrapper = styled(Box)`

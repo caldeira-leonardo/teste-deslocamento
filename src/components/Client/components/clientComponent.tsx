@@ -12,6 +12,8 @@ import {
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Tooltip } from '@mui/material';
+import { ClientActionIcon } from '@/src/utils/utils';
 
 interface ClientesComponentProps {
   getUserLocationData(cep: string): RespondeCepProps;
@@ -38,7 +40,15 @@ const ClientesComponent = (props: ClientesComponentProps) => {
     resetSelectUser,
   } = props;
   const [isOpen, setIsOpen] = useState<string>('');
-  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  const deleteClient = (id: string) => {
+    handleDeleteClient(id);
+  };
+
+  const selectClient = (id: string, type: string) => {
+    handleSelectClient(id);
+    setIsOpen(type);
+  };
 
   const clientsData = useMemo(() => {
     return clients?.map((client) => {
@@ -46,25 +56,30 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         ...client,
         actions: (
           <ActionsWrapper>
-            <ActionIcon
-              onClick={() => {
-                handleSelectClient(String(client?.id));
-                setIsOpen('View');
+            <ClientActionIcon
+              action={() => {
+                selectClient(String(client?.id), 'View');
               }}
-            >
-              <VisibilityIcon />
-            </ActionIcon>
-            <ActionIcon onClick={() => handleDeleteClient(String(client?.id))}>
-              <DeleteForeverIcon />
-            </ActionIcon>
-            <ActionIcon
-              onClick={() => {
-                handleSelectClient(String(client?.id));
-                setIsOpen('Edit');
+              icon={<VisibilityIcon />}
+              title="Visualizar"
+              placement="top"
+            />
+            <ClientActionIcon
+              action={() => {
+                selectClient(String(client?.id), 'Remove');
               }}
-            >
-              <ModeEditOutlineIcon />
-            </ActionIcon>
+              icon={<DeleteForeverIcon />}
+              title="Remover"
+              placement="top"
+            />
+            <ClientActionIcon
+              action={() => {
+                selectClient(String(client?.id), 'Edit');
+              }}
+              icon={<ModeEditOutlineIcon />}
+              title="Editar"
+              placement="top"
+            />
           </ActionsWrapper>
         ),
       };
@@ -76,22 +91,9 @@ const ClientesComponent = (props: ClientesComponentProps) => {
       <AddClientButton onClick={() => setIsOpen('Create')}>
         Adicionar Cliente
       </AddClientButton>
-      {/* <Button onClick={() => setIsConfirmationOpen(true)}>
-        Open Confirmation modal
-      </Button> */}
 
       <CustomizedTable
-        columns={[
-          'numeroDocumento',
-          'tipoDocumento',
-          'nome',
-          'logradouro',
-          'numero',
-          'bairro',
-          'cidade',
-          'uf',
-          'actions',
-        ]}
+        columns={tableColumns}
         rows={clientsData}
         onSelect={handleSelectClient}
       />
@@ -110,10 +112,10 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         />
       </CustomModal>
       <ConfirmationModal
-        isOpen={isConfirmationOpen}
-        onClose={() => setIsConfirmationOpen(false)}
-        onConfirm={() => setIsConfirmationOpen(false)}
-        title="Você irá remover os dados"
+        isOpen={['Remove'].includes(isOpen)}
+        onClose={() => setIsOpen('')}
+        onConfirm={() => deleteClient(String(selectedClient?.id))}
+        title={`Você irá remover o cliente ${selectedClient?.nome}`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
     </ClientWrapper>
@@ -121,3 +123,42 @@ const ClientesComponent = (props: ClientesComponentProps) => {
 };
 
 export default ClientesComponent;
+
+const tableColumns = [
+  {
+    key: 'nome',
+    label: 'Nome',
+  },
+  {
+    key: 'numeroDocumento',
+    label: 'Numero do documento',
+  },
+  {
+    key: 'tipoDocumento',
+    label: 'Tipo do documento',
+  },
+  {
+    key: 'logradouro',
+    label: 'Logradouro',
+  },
+  {
+    key: 'numero',
+    label: 'Número',
+  },
+  {
+    key: 'bairro',
+    label: 'Bairro',
+  },
+  {
+    key: 'cidade',
+    label: 'Cidade',
+  },
+  {
+    key: 'uf',
+    label: 'UF',
+  },
+  {
+    key: 'actions',
+    label: 'Ações',
+  },
+];

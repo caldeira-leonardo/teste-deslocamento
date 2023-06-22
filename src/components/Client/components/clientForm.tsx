@@ -104,7 +104,7 @@ const ClientForm = (props: ClientFormProps) => {
 
   return (
     <>
-      <ClientFormWrapper sx={{ width: { md: '30vw' } }}>
+      <ClientFormWrapper>
         <Input
           label="Nome"
           variant="outlined"

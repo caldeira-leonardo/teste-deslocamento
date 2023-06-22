@@ -15,7 +15,6 @@ export const AddClientButton = styled(Button)`
 `;
 
 export const ClientFormWrapper = styled(Box)`
-  min-width: 400px;
   padding: 25px 0;
 
   display: grid;
