@@ -20,7 +20,7 @@ interface ActionIconProps {
   icon: any;
 }
 
-export const ClientActionIcon = ({
+export const ActionIconComponent = ({
   action,
   icon,
   placement,

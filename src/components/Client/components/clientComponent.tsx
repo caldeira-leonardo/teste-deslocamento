@@ -3,17 +3,11 @@ import ConfirmationModal from '@/src/components/elements/Modal/confirmationModal
 import CustomModal from '@/src/components/elements/Modal/modal';
 import CustomizedTable from '@/src/components/elements/Table/Table';
 import ClientForm, { ClientProps, RespondeCepProps } from './clientForm';
-import {
-  ActionIcon,
-  ActionsWrapper,
-  AddClientButton,
-  ClientWrapper,
-} from './styleClient';
+import { ActionsWrapper, AddClientButton, ClientWrapper } from './styleClient';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Tooltip } from '@mui/material';
-import { ClientActionIcon } from '@/src/utils/utils';
+import { ActionIconComponent } from '@/src/utils/utils';
 
 interface ClientesComponentProps {
   getUserLocationData(cep: string): RespondeCepProps;
@@ -56,7 +50,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
         ...client,
         actions: (
           <ActionsWrapper>
-            <ClientActionIcon
+            <ActionIconComponent
               action={() => {
                 selectClient(String(client?.id), 'View');
               }}
@@ -64,7 +58,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
               title="Visualizar"
               placement="top"
             />
-            <ClientActionIcon
+            <ActionIconComponent
               action={() => {
                 selectClient(String(client?.id), 'Remove');
               }}
@@ -72,7 +66,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
               title="Remover"
               placement="top"
             />
-            <ClientActionIcon
+            <ActionIconComponent
               action={() => {
                 selectClient(String(client?.id), 'Edit');
               }}

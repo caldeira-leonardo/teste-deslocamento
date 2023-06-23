@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -12,14 +12,20 @@ interface CustomizedTableProps {
   rows: any;
   columns: { key: string; label: string; }[];
   onSelect(id: string): void;
+  minWidth?: number;
 }
 
-const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
+const CustomizedTable = ({
+  columns,
+  rows,
+  onSelect,
+  minWidth,
+}: CustomizedTableProps) => {
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const visibleRows = useMemo(
-    () => rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    () => rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [page, rowsPerPage, rows],
   );
 
@@ -37,10 +43,10 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }}>
+        <Table sx={{ minWidth: minWidth || 700 }}>
           <TableHead>
             <TableRow>
-              {columns.map((column, i: number) => (
+              {columns?.map((column, i: number) => (
                 <StyledTableCell key={i} align={i !== 0 ? 'right' : 'left'}>
                   {column.label}
                 </StyledTableCell>
@@ -48,7 +54,7 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {visibleRows.map((row: any, index: number) => {
+            {visibleRows?.map((row: any, index: number) => {
               return (
                 <StyledTableRow key={index}>
                   {columns.map((column, i: number) => {
@@ -76,7 +82,7 @@ const CustomizedTable = ({ columns, rows, onSelect }: CustomizedTableProps) => {
       <TablePagination
         rowsPerPageOptions={[5, 10]}
         component="div"
-        count={rows.length}
+        count={rows?.length || 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
