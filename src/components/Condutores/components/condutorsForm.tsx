@@ -1,9 +1,10 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
 import BottonButtons from '../../elements/Modal/bottomButtons';
 import { LogradouroWrapper, ConductorFormWrapper } from './styleCondutores';
+import moment from 'moment';
 
 interface ConductorFormProps {
   selectedConductor?: ConductorProps;
@@ -18,7 +19,8 @@ export interface ConductorProps {
   nome: string;
   numeroHabilitacao: string;
   catergoriaHabilitacao: string;
-  vencimentoHabilitacao?: string;
+  categoriaHabilitacao?: string;
+  vencimentoHabilitacao?: string | number;
 }
 
 const ConductorForm = (props: ConductorFormProps) => {
@@ -35,7 +37,9 @@ const ConductorForm = (props: ConductorFormProps) => {
       nome: selectedConductor?.nome || '',
       numeroHabilitacao: selectedConductor?.numeroHabilitacao || '',
       catergoriaHabilitacao: selectedConductor?.catergoriaHabilitacao || '',
-      vencimentoHabilitacao: selectedConductor?.vencimentoHabilitacao || '',
+      vencimentoHabilitacao: moment(
+        selectedConductor?.vencimentoHabilitacao || '',
+      ).format('YYYY-MM-DD'),
       id: selectedConductor?.id || '',
     },
     enableReinitialize: true,
@@ -45,18 +49,28 @@ const ConductorForm = (props: ConductorFormProps) => {
         .matches(/^\d+$/, 'Digite somente números')
         .required('Campo obligatorio'),
       catergoriaHabilitacao: Yup.string().required('Campo obligatorio'),
-      vencimentoHabilitacao: Yup.string(),
+      vencimentoHabilitacao: Yup.string().test({
+        test: (value) => {
+          return (
+            moment(value).isSame(selectedConductor?.vencimentoHabilitacao) ||
+            moment(value).isAfter(selectedConductor?.vencimentoHabilitacao)
+          );
+        },
+        message: 'O vencimento não pode ser anterior ao vencimento atual',
+      }),
     }),
-    onSubmit: async (values) => {
-      await submit(values);
+    onSubmit: async (values: ConductorProps) => {
+      const { vencimentoHabilitacao, ...newValues } = values;
+      await submit({
+        ...newValues,
+        vencimentoHabilitacao: moment(vencimentoHabilitacao).format(
+          'YYYY-MM-DD[T]HH:mm:ss[.000Z]',
+        ),
+      });
       formik.resetForm();
       handleClose();
     },
   });
-
-  useEffect(() => {
-    console.log('formik', formik); //TODO remove log
-  }, [formik]);
 
   return (
     <>
@@ -102,6 +116,7 @@ const ConductorForm = (props: ConductorFormProps) => {
             fullWidth
             type="date"
             id="vencimentoHabilitacao"
+            defaultValue={formik?.values?.vencimentoHabilitacao}
             formik={formik}
             disabled={type === 'View'}
           />

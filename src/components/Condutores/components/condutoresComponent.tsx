@@ -12,6 +12,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ConductorForm from './condutorsForm';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 const CondutoresComponent = (props: any) => {
   const {
@@ -25,6 +27,7 @@ const CondutoresComponent = (props: any) => {
     handleSelectConductor,
   } = props;
   const [isOpen, setIsOpen] = useState('');
+  moment.locale('PT-BR');
 
   const selectConductor = (id: string, type: string) => {
     handleSelectConductor(id);
@@ -35,6 +38,9 @@ const CondutoresComponent = (props: any) => {
     return conductors?.map((conductor: any) => {
       return {
         ...conductor,
+        vencimentoHabilitacao: moment(conductor.vencimentoHabilitacao).format(
+          'LL',
+        ),
         actions: (
           <ActionsWrapper>
             <ActionIconComponent
@@ -99,7 +105,7 @@ const CondutoresComponent = (props: any) => {
           resetSelectedConductor();
           setIsOpen('');
         }}
-        title={`Você irá remover o condutor ${selectedConductor?.nome}`}
+        title={`Você irá remover o condutor "${selectedConductor?.nome}"`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
     </ClientWrapper>

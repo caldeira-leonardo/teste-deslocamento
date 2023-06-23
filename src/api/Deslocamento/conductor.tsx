@@ -14,8 +14,11 @@ export const getConductorData = async () => {
 };
 
 export const postConductorData = async (data: ConductorProps) => {
+  const { id, catergoriaHabilitacao, ...newData } = data;
+  newData.categoriaHabilitacao = catergoriaHabilitacao;
+
   await deslocamentoApi
-    .post(`/Condutor`, data)
+    .post(`/Condutor`, newData)
     .then((res) => {
       toast('Condutor criado com sucesso', {
         ...{ toastrProps },
@@ -24,7 +27,7 @@ export const postConductorData = async (data: ConductorProps) => {
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`Algo deu errado, tente mais tarde`, {
         ...{ toastrProps },
         type: 'error',
       });
@@ -33,10 +36,11 @@ export const postConductorData = async (data: ConductorProps) => {
 };
 
 export const patchConductorData = async (data: ConductorProps) => {
-  const { numeroHabilitacao, nome, ...newData } = data;
+  const { numeroHabilitacao, catergoriaHabilitacao, nome, ...newData } = data;
+  newData.categoriaHabilitacao = catergoriaHabilitacao;
 
   await deslocamentoApi
-    .put(`/Condutor/${data.id}`, { ...newData })
+    .put(`/Condutor/${data.id}`, newData)
     .then((res) => {
       toast('Condutor alterado com sucesso', {
         ...{ toastrProps },
