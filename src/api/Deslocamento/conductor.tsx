@@ -1,4 +1,4 @@
-import { ConductorProps } from '@/src/components/Condutores/components/condutorsForm';
+import { ConductorProps } from '@/src/components/Condutors/components/condutorsForm';
 import deslocamentoApi from './deslocamento';
 import { toast } from 'react-toastify';
 
@@ -27,7 +27,7 @@ export const postConductorData = async (data: ConductorProps) => {
       return res.data;
     })
     .catch((err) => {
-      toast(`Algo deu errado, tente mais tarde`, {
+      toast(`${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });
@@ -49,7 +49,7 @@ export const patchConductorData = async (data: ConductorProps) => {
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });
@@ -68,7 +68,7 @@ export const deleteConductorData = async (clientId: string | number) => {
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });

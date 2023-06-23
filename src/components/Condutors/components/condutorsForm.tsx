@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
 import BottonButtons from '../../elements/Modal/bottomButtons';
-import { LogradouroWrapper, ConductorFormWrapper } from './styleCondutores';
+import { LogradouroWrapper, ConductorFormWrapper } from './styleCondutors';
 import moment from 'moment';
 
 interface ConductorFormProps {
@@ -52,8 +52,16 @@ const ConductorForm = (props: ConductorFormProps) => {
       vencimentoHabilitacao: Yup.string().test({
         test: (value) => {
           return (
-            moment(value).isSame(selectedConductor?.vencimentoHabilitacao) ||
-            moment(value).isAfter(selectedConductor?.vencimentoHabilitacao)
+            moment(value).isSame(
+              moment(selectedConductor?.vencimentoHabilitacao).format(
+                'YYYY-MM-DD',
+              ),
+            ) ||
+            moment(value).isAfter(
+              moment(selectedConductor?.vencimentoHabilitacao).format(
+                'YYYY-MM-DD',
+              ),
+            )
           );
         },
         message: 'O vencimento não pode ser anterior ao vencimento atual',

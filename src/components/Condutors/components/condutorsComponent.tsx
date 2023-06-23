@@ -15,7 +15,7 @@ import ConductorForm from './condutorsForm';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-const CondutoresComponent = (props: any) => {
+const CondutorsComponent = (props: any) => {
   const {
     conductors,
     selectedConductor,
@@ -112,7 +112,7 @@ const CondutoresComponent = (props: any) => {
   );
 };
 
-export default CondutoresComponent;
+export default CondutorsComponent;
 
 const tableColumns = [
   {

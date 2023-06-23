@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CondutoresComponent from '../components/condutoresComponent';
+import CondutoresComponent from '../components/condutorsComponent';
 import { ConductorProps } from '../components/condutorsForm';
 import {
   deleteConductorData,
@@ -8,7 +8,7 @@ import {
   postConductorData,
 } from '@/src/api/Deslocamento/conductor';
 
-const Condutores = () => {
+const Condutors = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [conductors, setConductors] = useState<ConductorProps[]>([]);
   const [selectedConductor, setSelectedConductor] = useState<ConductorProps>();
@@ -71,4 +71,4 @@ const Condutores = () => {
   );
 };
 
-export default Condutores;
+export default Condutors;
