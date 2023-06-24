@@ -105,13 +105,13 @@ const menuList = [
     path: '/condutores',
   },
   {
-    name: 'Deslocamento',
-    icon: <PersonPinCircleRoundedIcon />,
-    path: '/deslocamento',
-  },
-  {
     name: 'Veiculos',
     icon: <LocalShippingRoundedIcon />,
     path: '/veiculos',
+  },
+  {
+    name: 'Deslocamento',
+    icon: <PersonPinCircleRoundedIcon />,
+    path: '/deslocamento',
   },
 ];

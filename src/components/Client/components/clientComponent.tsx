@@ -35,8 +35,8 @@ const ClientesComponent = (props: ClientesComponentProps) => {
   } = props;
   const [isOpen, setIsOpen] = useState<string>('');
 
-  const deleteClient = (id: string) => {
-    handleDeleteClient(id);
+  const deleteClient = async (id: string) => {
+    await handleDeleteClient(id);
   };
 
   const selectClient = (id: string, type: string) => {
@@ -108,7 +108,10 @@ const ClientesComponent = (props: ClientesComponentProps) => {
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
         onClose={() => setIsOpen('')}
-        onConfirm={() => deleteClient(String(selectedClient?.id))}
+        onConfirm={() => {
+          deleteClient(String(selectedClient?.id));
+          setIsOpen('');
+        }}
         title={`Você irá remover o cliente ${selectedClient?.nome}`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
