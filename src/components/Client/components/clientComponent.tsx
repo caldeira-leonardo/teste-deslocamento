@@ -37,6 +37,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
 
   const deleteClient = async (id: string) => {
     await handleDeleteClient(id);
+    setIsOpen('');
   };
 
   const selectClient = (id: string, type: string) => {
@@ -108,10 +109,7 @@ const ClientesComponent = (props: ClientesComponentProps) => {
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
         onClose={() => setIsOpen('')}
-        onConfirm={() => {
-          deleteClient(String(selectedClient?.id));
-          setIsOpen('');
-        }}
+        onConfirm={() => deleteClient(String(selectedClient?.id))}
         title={`Você irá remover o cliente ${selectedClient?.nome}`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
