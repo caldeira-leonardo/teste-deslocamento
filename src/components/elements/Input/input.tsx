@@ -1,10 +1,22 @@
 import React from 'react';
-import { TextField, BaseTextFieldProps } from '@mui/material';
+import {
+  TextField,
+  BaseTextFieldProps,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import { ErrorLabel, InputWrapper } from './styleInput';
 
 interface InputProps extends BaseTextFieldProps {
   formik: any;
   id: string;
+  type?: string;
+  options?: {
+    key: string;
+    label: string;
+  }[];
 }
 
 interface formikProps {
@@ -14,7 +26,7 @@ interface formikProps {
 }
 
 const Input = (props: InputProps) => {
-  const { id, formik } = props;
+  const { id, formik, type, options } = props;
   let formikProps: formikProps = {
     value: '',
     error: false,
@@ -36,13 +48,33 @@ const Input = (props: InputProps) => {
 
   return (
     <InputWrapper>
-      <TextField
-        {...props}
-        {...formikProps}
-        variant="outlined"
-        onChange={(e) => formik.setFieldValue(id, e.target.value)}
-        onBlur={handleBlur}
-      />
+      {type === 'select' ? (
+        <FormControl fullWidth>
+          <InputLabel id={id}>Age</InputLabel>
+          <Select
+            {...formikProps}
+            labelId={id}
+            id={id}
+            label={props.label}
+            onChange={(e) => formik.setFieldValue(id, e.target.value)}
+          >
+            {options?.map((option) => (
+              <MenuItem key={option.key} value={option.key}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ) : (
+        <TextField
+          {...props}
+          {...formikProps}
+          variant="outlined"
+          onChange={(e) => formik.setFieldValue(id, e.target.value)}
+          onBlur={handleBlur}
+        />
+      )}
+
       {formikProps.error && <ErrorLabel>{formik?.errors[id]}</ErrorLabel>}
     </InputWrapper>
   );

@@ -97,6 +97,7 @@ const CondutorsComponent = (props: any) => {
           type={isOpen}
         />
       </CustomModal>
+
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
         onClose={() => setIsOpen('')}
