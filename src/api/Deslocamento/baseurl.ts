@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const deslocamentoApi = axios.create({
+const baseurl = axios.create({
   baseURL: 'https://api-deslocamento.herokuapp.com/api/v1',
 });
 
-export default deslocamentoApi;
+export default baseurl;

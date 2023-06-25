@@ -1,10 +1,10 @@
-import { ClientProps } from '@/src/components/Client/components/clientForm';
-import { toast } from 'react-toastify';
+import { VehiclesProps } from '@/src/components/Vehicles/components/vehiclesForm';
 import baseurl from './baseurl';
+import { toast } from 'react-toastify';
 
-export const getClientsData = async () => {
+export const getDeslocamentoData = async () => {
   return await baseurl
-    .get(`/Cliente`)
+    .get(`/Deslocamento`)
     .then((res) => {
       return res.data;
     })
@@ -13,11 +13,11 @@ export const getClientsData = async () => {
     });
 };
 
-export const postClientsData = async (data: ClientProps) => {
+export const postDeslocamentoData = async (data: VehiclesProps) => {
   await baseurl
-    .post(`/Cliente`, data)
+    .post(`/Deslocamento/IniciarDeslocamento`, data)
     .then((res) => {
-      toast('Usuário criado com sucesso', {
+      toast('Deslocamento criado com sucesso', {
         ...{ toastrProps },
         type: 'success',
       });
@@ -32,13 +32,13 @@ export const postClientsData = async (data: ClientProps) => {
     });
 };
 
-export const patchClientsData = async (data: ClientProps) => {
-  const { numeroDocumento, tipoDocumento, ...newData } = data;
+export const patchDeslocamentoData = async (data: VehiclesProps) => {
+  const { ...newData } = data;
 
   await baseurl
-    .put(`/Cliente/${data.id}`, { ...newData })
+    .put(`/Deslocamento/${data.id}`, { ...newData })
     .then((res) => {
-      toast('Usuário alterado com sucesso', {
+      toast('Deslocamento alterado com sucesso', {
         ...{ toastrProps },
         type: 'success',
       });
@@ -53,11 +53,13 @@ export const patchClientsData = async (data: ClientProps) => {
     });
 };
 
-export const deleteClientsData = async (clientId: string | number) => {
+export const deleteDeslocamentoData = async (
+  deslocamentoId: string | number,
+) => {
   await baseurl
-    .delete(`/Cliente/${clientId}`, { data: { id: clientId } })
+    .delete(`/Deslocamento/${deslocamentoId}`, { data: { id: deslocamentoId } })
     .then((res) => {
-      toast('Usuário excluido com sucesso', {
+      toast('Deslocamento excluido com sucesso', {
         ...{ toastrProps },
         type: 'success',
       });

@@ -1,9 +1,9 @@
 import { ConductorProps } from '@/src/components/Condutors/components/condutorsForm';
-import deslocamentoApi from './deslocamento';
 import { toast } from 'react-toastify';
+import baseurl from './baseurl';
 
 export const getConductorData = async () => {
-  return await deslocamentoApi
+  return await baseurl
     .get(`/Condutor`)
     .then((res) => {
       return res.data;
@@ -17,7 +17,7 @@ export const postConductorData = async (data: ConductorProps) => {
   const { id, catergoriaHabilitacao, ...newData } = data;
   newData.categoriaHabilitacao = catergoriaHabilitacao;
 
-  await deslocamentoApi
+  await baseurl
     .post(`/Condutor`, newData)
     .then((res) => {
       toast('Condutor criado com sucesso', {
@@ -39,7 +39,7 @@ export const patchConductorData = async (data: ConductorProps) => {
   const { numeroHabilitacao, catergoriaHabilitacao, nome, ...newData } = data;
   newData.categoriaHabilitacao = catergoriaHabilitacao;
 
-  await deslocamentoApi
+  await baseurl
     .put(`/Condutor/${data.id}`, newData)
     .then((res) => {
       toast('Condutor alterado com sucesso', {
@@ -57,9 +57,9 @@ export const patchConductorData = async (data: ConductorProps) => {
     });
 };
 
-export const deleteConductorData = async (clientId: string | number) => {
-  await deslocamentoApi
-    .delete(`/Condutor/${clientId}`, { data: { id: clientId } })
+export const deleteConductorData = async (conductorId: string | number) => {
+  await baseurl
+    .delete(`/Condutor/${conductorId}`, { data: { id: conductorId } })
     .then((res) => {
       toast('Condutor excluido com sucesso', {
         ...{ toastrProps },
