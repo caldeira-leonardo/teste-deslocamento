@@ -14,7 +14,7 @@ interface InputProps extends BaseTextFieldProps {
   id: string;
   type?: string;
   options?: {
-    key: string;
+    key: string | number;
     label: string;
   }[];
 }
@@ -46,17 +46,27 @@ const Input = (props: InputProps) => {
     formik.setTouched({ ...formik.touched, [id]: true });
   };
 
+  const handleSelectOption = (value: string | number) => {
+    const selectedOption = options?.filter((option) => option.key === value)[0];
+    formik.setFieldValue(id, selectedOption);
+  };
+
   return (
     <InputWrapper>
       {type === 'select' ? (
         <FormControl fullWidth>
-          <InputLabel id={id}>Age</InputLabel>
+          <InputLabel color="secondary" id={formik.values[id].label}>
+            {props.label}
+          </InputLabel>
           <Select
             {...formikProps}
-            labelId={id}
+            variant="outlined"
+            color="secondary"
+            labelId={formik.values[id].label}
             id={id}
             label={props.label}
-            onChange={(e) => formik.setFieldValue(id, e.target.value)}
+            value={formik.values[id].key}
+            onChange={(e) => handleSelectOption(e.target.value)}
           >
             {options?.map((option) => (
               <MenuItem key={option.key} value={option.key}>

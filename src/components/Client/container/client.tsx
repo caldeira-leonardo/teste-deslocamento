@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ClientesComponent from '../components/clientComponent';
 import buscaCepApi from '@/src/api/buscaCep';
 import { ClientProps } from '../components/clientForm';
@@ -13,6 +13,7 @@ const Client = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [clients, setClients] = useState<ClientProps[]>([]);
   const [selectedClient, setSelectedClient] = useState<ClientProps>();
+  const wasCalled = useRef(false);
 
   const getUserLocationData: any = async (cep: string) => {
     const data = await buscaCepApi
@@ -69,7 +70,11 @@ const Client = () => {
   };
 
   useEffect(() => {
-    getClients();
+    if (!wasCalled.current) {
+      getClients();
+      wasCalled.current = true;
+    }
+    console.log('wasCalled.current', wasCalled.current); //TODO remove logs
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -24,6 +24,9 @@ const DeslocamentoComponent = (props: any) => {
     loading,
     submit,
     edit,
+    clients,
+    vehicles,
+    conductors,
   } = props;
   const [isOpen, setIsOpen] = useState('');
 
@@ -43,7 +46,7 @@ const DeslocamentoComponent = (props: any) => {
           <ActionsWrapper>
             <ActionIconComponent
               action={() => {
-                console.log(conductor?.id, 'View');
+                selectDeslocamento(conductor?.id, 'View');
               }}
               icon={<VisibilityIcon />}
               title="Visualizar"
@@ -51,7 +54,7 @@ const DeslocamentoComponent = (props: any) => {
             />
             <ActionIconComponent
               action={() => {
-                console.log(conductor?.id, 'Remove');
+                selectDeslocamento(conductor?.id, 'Remove');
               }}
               icon={<DeleteForeverIcon />}
               title="Remover"
@@ -59,7 +62,7 @@ const DeslocamentoComponent = (props: any) => {
             />
             <ActionIconComponent
               action={() => {
-                console.log(conductor?.id, 'Edit');
+                selectDeslocamento(conductor?.id, 'Edit');
               }}
               icon={<ModeEditOutlineIcon />}
               title="Editar"
@@ -74,16 +77,16 @@ const DeslocamentoComponent = (props: any) => {
   return (
     <ClientWrapper>
       <AddClientButton onClick={() => setIsOpen('Create')}>
-        Adicionar Condutor
+        Adicionar Deslocamento
       </AddClientButton>
 
-      {/* <CustomizedTable
+      <CustomizedTable
         columns={tableColumns}
         rows={conductorsData}
-        onSelect={selectDeslocamento}
-      /> */}
+        onSelect={handleSelectDeslocamento}
+      />
 
-      {/* <CustomModal
+      <CustomModal
         isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
         title="Adicionar novo condutor"
         onCancel={() => setIsOpen('')}
@@ -91,14 +94,14 @@ const DeslocamentoComponent = (props: any) => {
       >
         <DeslocamentoForm
           {...{ loading, selectedDeslocamento, resetSelectedConductor }}
-          clientOptions={}
-          conductorOptions={}
-          vehicleOptions={}
+          clientOptions={clients}
+          conductorOptions={conductors}
+          vehicleOptions={vehicles}
           submit={isOpen === 'Create' ? submit : edit}
           handleClose={() => setIsOpen('')}
           type={isOpen}
         />
-      </CustomModal> */}
+      </CustomModal>
 
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}

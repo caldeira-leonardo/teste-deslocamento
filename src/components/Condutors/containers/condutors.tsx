@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CondutoresComponent from '../components/condutorsComponent';
 import { ConductorProps } from '../components/condutorsForm';
 import {
@@ -12,6 +12,7 @@ const Condutors = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [conductors, setConductors] = useState<ConductorProps[]>([]);
   const [selectedConductor, setSelectedConductor] = useState<ConductorProps>();
+  const wasCalled = useRef(false);
 
   const resetSelectedConductor = () => {
     setSelectedConductor({
@@ -53,7 +54,10 @@ const Condutors = () => {
   };
 
   useEffect(() => {
-    getConductors();
+    if (!wasCalled.current) {
+      getConductors();
+      wasCalled.current = true;
+    }
   }, []);
 
   return (

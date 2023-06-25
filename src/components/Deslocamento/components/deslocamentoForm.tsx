@@ -63,6 +63,9 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     selectedConductor,
     type,
     resetSelectedConductor,
+    clientOptions,
+    conductorOptions,
+    vehicleOptions,
   } = props;
 
   const formik = useFormik<DeslocamentoProps>({
@@ -130,6 +133,10 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     },
   });
 
+  useEffect(() => {
+    console.log('formik', formik); //TODO remove log
+  }, [formik]);
+
   return (
     <>
       <ConductorFormWrapper>
@@ -140,6 +147,8 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           fullWidth
           id="idCliente"
           formik={formik}
+          type="select"
+          options={clientOptions}
           disabled={['View', 'Edit'].includes(type)}
         />
         <Input

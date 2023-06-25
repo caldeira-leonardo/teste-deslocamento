@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import VehiclesComponent from '../components/vehiclesComponent';
 import { VehiclesProps } from '../components/vehiclesForm';
 import {
@@ -12,6 +12,7 @@ const Vehicles = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [vehicles, setVehicles] = useState<VehiclesProps[]>([]);
   const [selectedVehicle, setSelectedVehicle] = useState<VehiclesProps>();
+  const wasCalled = useRef(false);
 
   const resetSelectVehicle = () =>
     setSelectedVehicle({
@@ -51,7 +52,10 @@ const Vehicles = () => {
   };
 
   useEffect(() => {
-    getVehicles();
+    if (!wasCalled.current) {
+      getVehicles();
+      wasCalled.current = true;
+    }
   }, []);
 
   return (
