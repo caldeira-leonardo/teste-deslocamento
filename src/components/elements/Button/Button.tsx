@@ -4,7 +4,7 @@ import {
   ButtonProps as MaterialButtonProps,
 } from '@mui/material';
 
-interface ButtonProps extends MaterialButtonProps {
+export interface ButtonProps extends MaterialButtonProps {
   children: React.ReactNode;
 }
 

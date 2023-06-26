@@ -3,12 +3,10 @@ import Modal from '@mui/material/Modal';
 import { Divider } from '@mui/material';
 
 import {
-  BottomIcons,
   CloseIconButton,
   ModalContentWrapper,
   ModalWrapper,
 } from './styleModal';
-import Button from '../Button/Button';
 
 interface CustomModalProps {
   isOpen: boolean;

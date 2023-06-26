@@ -46,6 +46,7 @@ const VehicleForm = (props: ClientFormProps) => {
       id: Yup.string(),
       placa: Yup.string()
         .required('Campo obrigatório')
+        .max(7, 'Máximo de 7 caracteres')
         .matches(
           /[a-zA-Z]{3}[0-9]{1}[a-zA-Z0-9]{1}[0-9]{1}/,
           'Siga esse padrão: AAA1*34',
