@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   TextField,
   BaseTextFieldProps,
@@ -14,6 +14,7 @@ interface InputProps extends BaseTextFieldProps {
   formik?: any;
   id: string;
   type?: string;
+  readOnly?: boolean;
   options?: {
     key: string | number;
     label: string;
@@ -64,6 +65,7 @@ const Input = (props: InputProps) => {
             variant="outlined"
             onBlur={handleBlur}
             color="secondary"
+            readOnly={props.readOnly}
             labelId={formik.values[id].label}
             id={id}
             label={props.label}
@@ -86,9 +88,11 @@ const Input = (props: InputProps) => {
               dayjs(e).format('YYYY-MM-DD[T]HH:mm:ss[.000Z]'),
             )
           }
+          disabled={props.disabled}
           label={props.label}
+          readOnly={props.readOnly}
           format="DD/MM/YYYY LTS"
-          value={formik.values[id].key}
+          value={formik.values[id] ? dayjs(formik.values[id]) : null}
           viewRenderers={{
             hours: renderTimeViewClock,
             minutes: renderTimeViewClock,

@@ -23,7 +23,7 @@ export interface DeslocamentoProps {
   idCondutor: number;
   idVeiculo: number;
   inicioDeslocamento: string;
-  kmFinal: null;
+  kmFinal: number;
   kmInicial: number;
   motivo: string;
   observacao: string;
@@ -33,9 +33,9 @@ const DeslocamentoComponent = (props: any) => {
   const {
     deslocamentos,
     handleSelectDeslocamento,
+    resetSelectedDeslocamento,
     deleteDeslocamento,
     selectedDeslocamento,
-    resetSelectedConductor,
     loading,
     submit,
     edit,
@@ -64,9 +64,9 @@ const DeslocamentoComponent = (props: any) => {
 
       return {
         ...desloc,
-        cliente: selectedClient.label,
-        condutor: selectedConductor.label,
-        veiculo: selectedVehicle.label,
+        cliente: selectedClient?.label,
+        condutor: selectedConductor?.label,
+        veiculo: selectedVehicle?.label,
         inicioDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
         fimDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
         actions: (
@@ -99,7 +99,7 @@ const DeslocamentoComponent = (props: any) => {
         ),
       };
     });
-  }, [deslocamentos]);
+  }, [deslocamentos, clients, conductors, vehicles]);
 
   useEffect(() => {
     console.log('conductorsData', conductorsData); //TODO remove log
@@ -140,7 +140,12 @@ const DeslocamentoComponent = (props: any) => {
         onClose={() => setIsOpen('')}
       >
         <DeslocamentoForm
-          {...{ loading, selectedDeslocamento, resetSelectedConductor }}
+          {...{
+            loading,
+            selectedDeslocamento,
+            handleSelectDeslocamento,
+            resetSelectedDeslocamento,
+          }}
           clientOptions={clients}
           conductorOptions={conductors}
           vehicleOptions={vehicles}
@@ -157,7 +162,7 @@ const DeslocamentoComponent = (props: any) => {
         onClose={() => setIsOpen('')}
         onConfirm={async () => {
           await deleteDeslocamento(parseInt(selectedDeslocamento?.id));
-          resetSelectedConductor();
+          handleSelectDeslocamento();
           setIsOpen('');
         }}
         title={`Você irá remover o condutor "${selectedDeslocamento?.nome}"`}

@@ -26,6 +26,7 @@ export const ItemWrapper = styled(Box)`
   padding: 4px 15px;
   display: flex;
   align-items: center;
+  /* cursor: pointer; */
 
   .MuiBox-root,
   .mui-style-10hburv-MuiTypography-root {

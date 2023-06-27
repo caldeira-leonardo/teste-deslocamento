@@ -6,7 +6,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { StyledTableCell, StyledTableRow } from './styleTable';
-import { TablePagination } from '@mui/material';
+import { TablePagination, Tooltip } from '@mui/material';
+import _ from 'lodash';
 
 interface CustomizedTableProps {
   rows: any;
@@ -59,18 +60,28 @@ const CustomizedTable = ({
                 <StyledTableRow key={index}>
                   {columns.map((column, i: number) => {
                     return (
-                      <StyledTableCell
-                        sx={{
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                        align={i !== 0 ? 'right' : 'left'}
+                      <Tooltip
+                        title={
+                          column.key !== 'actions' ? row[`${column.key}`] : ''
+                        }
                         key={i}
-                        onClick={() => onSelect(row.id)}
+                        placement="right"
                       >
-                        {row[`${column.key}`]}
-                      </StyledTableCell>
+                        <StyledTableCell
+                          sx={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                          align={i !== 0 ? 'right' : 'left'}
+                          key={i}
+                          onClick={() => onSelect(row.id)}
+                        >
+                          {row[`${column.key}`]?.length > 50
+                            ? `${row[`${column.key}`].substr(0, 50)}...`
+                            : row[`${column.key}`]}
+                        </StyledTableCell>
+                      </Tooltip>
                     );
                   })}
                 </StyledTableRow>

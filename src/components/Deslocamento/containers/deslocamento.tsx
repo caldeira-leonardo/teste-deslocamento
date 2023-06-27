@@ -17,8 +17,12 @@ const Deslocamento = () => {
   const [clients, setClients] = useState<ClientProps[]>([]);
   const [vehicles, setVehicles] = useState<VehiclesProps[]>([]);
   const [conductors, setConductors] = useState<ConductorProps[]>([]);
-  const [deslocamentos, setDeslocamentos] = useState<DeslocamentoProps>();
-  const [selectedDeslocamento, setSelectedDeslocamento] = useState(false);
+  const [deslocamentos, setDeslocamentos] = useState<DeslocamentoProps[]>([]);
+  const [
+    selectedDeslocamento,
+    setSelectedDeslocamento,
+  ] = useState<DeslocamentoProps>();
+
   const [checklist, setChecklist] = useState<
     {
       checked: boolean;
@@ -47,18 +51,58 @@ const Deslocamento = () => {
       label: 'Combustível',
     },
   ]);
+
   const wasCalled = useRef(false);
 
-  const handleChecklist = (item: string, key: number) => {
+  const resetSelectedDeslocamento = () => {
+    setSelectedDeslocamento({
+      id: 0,
+      kmInicial: 0,
+      kmFinal: 0,
+      inicioDeslocamento: '',
+      fimDeslocamento: '',
+      checkList: '',
+      motivo: '',
+      observacao: '',
+      idCondutor: 0,
+      idVeiculo: 0,
+      idCliente: 0,
+    });
+    setChecklist([
+      {
+        key: 0,
+        checked: false,
+        label: 'Freios',
+      },
+      {
+        key: 1,
+        checked: false,
+        label: 'Documentos',
+      },
+      {
+        key: 2,
+        checked: false,
+        label: 'Óleo',
+      },
+      {
+        key: 3,
+        checked: false,
+        label: 'Combustível',
+      },
+    ]);
+  };
+
+  const handleChecklist = (item: string, newChecked?: boolean) => {
+    console.log('item', item); //TODO remove logs
     setChecklist((values) => {
       let itemFinded = false;
       const newValues = values.map((value) => {
         let newItem: any = {};
-        if (value.key === key) {
+        if (value.label === item) {
           itemFinded = true;
           newItem = {
             key: value.key,
-            checked: !value.checked,
+            checked: newChecked || !value.checked,
             label: value.label,
           };
         } else newItem = value;
@@ -75,8 +119,12 @@ const Deslocamento = () => {
     });
   };
 
-  const handleSelectDeslocamento = (clientId: string | number) => {
-    setSelectedDeslocamento(false);
+  const handleSelectDeslocamento = (id: string | number) => {
+    const selectedDesloc = deslocamentos.filter(
+      (desloc) => desloc.id === id,
+    )[0];
+
+    setSelectedDeslocamento(selectedDesloc);
   };
 
   const getClients = async () => {
@@ -141,6 +189,7 @@ const Deslocamento = () => {
         deslocamentos,
         selectedDeslocamento,
         submit,
+        resetSelectedDeslocamento,
       }}
     />
   );

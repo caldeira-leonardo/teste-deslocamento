@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react';
-import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react';
 import Input from '@/src/components/elements/Input/input';
 import { useFormik } from 'formik';
 import BottonButtons from '../../elements/Modal/bottomButtons';
-import moment from 'moment';
 import { ConductorFormWrapper } from '../../Condutors/components/styleCondutors';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { ChecklistWrapper } from './styleDeslocamento';
 
 interface DeslocamentoFormProps {
-  selectedConductor?: DeslocamentoProps;
+  selectedDeslocamento?: DeslocamentoProps;
   submit(values: DeslocamentoProps): void;
   handleClose(): void;
   type: string;
-  resetSelectedConductor(): void;
+  resetSelectedDeslocamento(): void;
   conductorOptions: {
     key: number | string;
     label: string;
@@ -31,7 +29,7 @@ interface DeslocamentoFormProps {
     label: string;
     key: number;
   }[];
-  handleChecklist(value: string, key: number): void;
+  handleChecklist(value: string, newChacked?: boolean): void;
 }
 
 interface DeslocamentoProps {
@@ -70,71 +68,51 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
   const {
     submit,
     handleClose,
-    selectedConductor,
+    selectedDeslocamento,
     type,
-    resetSelectedConductor,
+    resetSelectedDeslocamento,
     clientOptions,
     conductorOptions,
     vehicleOptions,
     checklistOptions,
     handleChecklist,
   } = props;
+  const [valueTeste, setValueTeste] = useState(0);
+
+  const selectedClient = clientOptions.filter(
+    (client) => client.key === selectedDeslocamento?.idCliente,
+  )[0];
+
+  const selectedConductor = conductorOptions.filter(
+    (conductor) => conductor.key === selectedDeslocamento?.idCondutor,
+  )[0];
+
+  const selectedVehicle = vehicleOptions.filter(
+    (vehicle) => vehicle.key === selectedDeslocamento?.idVeiculo,
+  )[0];
 
   const formik = useFormik<DeslocamentoProps>({
     initialValues: {
       idCliente: {
-        key: '',
-        label: '',
+        key: selectedClient?.key || '',
+        label: selectedClient?.label || '',
       },
       idCondutor: {
-        key: '',
-        label: '',
+        key: selectedConductor?.key || '',
+        label: selectedConductor?.label || '',
       },
       idVeiculo: {
-        key: '',
-        label: '',
+        key: selectedVehicle?.key || '',
+        label: selectedVehicle?.label || '',
       },
-      kmInicial: 0,
-      inicioDeslocamento: moment().format('YYYY-MM-DD'),
-      checkList: '',
-      motivo: '',
-      observacao: '',
-      // nome: selectedConductor?.nome || '',
-      // numeroHabilitacao: selectedConductor?.numeroHabilitacao || '',
-      // catergoriaHabilitacao: selectedConductor?.catergoriaHabilitacao || '',
-      // vencimentoHabilitacao: moment(
-      //   selectedConductor?.vencimentoHabilitacao || '',
-      // ).format('YYYY-MM-DD'),
-      // id: selectedConductor?.id || '',
+      kmInicial: selectedDeslocamento?.kmInicial || 0,
+      inicioDeslocamento: selectedDeslocamento?.inicioDeslocamento || '',
+      fimDeslocamento: selectedDeslocamento?.fimDeslocamento || '',
+      checkList: selectedDeslocamento?.checkList || '',
+      motivo: selectedDeslocamento?.motivo || '',
+      observacao: selectedDeslocamento?.observacao || '',
     },
     enableReinitialize: true,
-    validationSchema: Yup.object().shape({
-      idCliente: Yup.object(),
-      idCondutor: Yup.object(),
-      idVeiculo: Yup.object(),
-      // nome: Yup.string().required('Campo obligatorio'),
-      // numeroHabilitacao: Yup.string()
-      //   .matches(/^\d+$/, 'Digite somente números')
-      //   .required('Campo obligatorio'),
-      // catergoriaHabilitacao: Yup.string().required('Campo obligatorio'),
-      // vencimentoHabilitacao: Yup.string().test({
-      //   test: (value) => {
-      //     return (
-      //       moment(value).isSame(
-      //         moment(selectedConductor?.inicioDeslocamento).format(
-      //           'YYYY-MM-DD',
-      //         ),
-      //       ) ||
-      //       moment(value).isAfter(
-      //         moment(selectedConductor?.vencimentoHabilitacao).format(
-      //           'YYYY-MM-DD',
-      //         ),
-      //       )
-      //     );
-      //   },
-      //   message: 'O vencimento não pode ser anterior ao vencimento atual',
-      // }),
-    }),
     onSubmit: async (values: DeslocamentoProps) => {
       const { idCliente, idCondutor, idVeiculo } = values;
       await submit({
@@ -158,8 +136,17 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
   }, [checklistOptions]);
 
   useEffect(() => {
-    console.log('formik', formik); //TODO remove log
-  }, [formik]);
+    setValueTeste((value) => {
+      return value + 1;
+    });
+    const checkedItems = selectedDeslocamento?.checkList
+      .split(',')
+      .filter((item) => item);
+
+    checkedItems?.forEach((item) => {
+      handleChecklist(item, true);
+    });
+  }, [selectedDeslocamento?.checkList]);
 
   return (
     <>
@@ -173,7 +160,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           formik={formik}
           type="select"
           options={clientOptions}
-          disabled={['View', 'Edit'].includes(type)}
+          readOnly={['View'].includes(type)}
         />
         <Input
           label="Condutor"
@@ -184,7 +171,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           formik={formik}
           type="select"
           options={conductorOptions}
-          disabled={['View', 'Edit'].includes(type)}
+          readOnly={['View'].includes(type)}
         />
         <Input
           label="Veiculo"
@@ -195,7 +182,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           formik={formik}
           type="select"
           options={vehicleOptions}
-          disabled={type === 'View'}
+          readOnly={type === 'View'}
           sx={{ marginBottom: { xs: '10px', md: '0' } }}
         />
         <Input
@@ -206,7 +193,17 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           type="fullDate"
           id="inicioDeslocamento"
           formik={formik}
-          disabled={type === 'View'}
+          readOnly={type === 'View'}
+        />
+        <Input
+          label="Fim do deslocamento"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          type="fullDate"
+          id="fimDeslocamento"
+          formik={formik}
+          readOnly={type === 'View' || type === 'Create'}
         />
         <Input
           label="Motivo do deslocamento"
@@ -239,7 +236,9 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
                   <Checkbox
                     color="secondary"
                     checked={option.checked}
-                    onClick={() => handleChecklist(option.label, option.key)}
+                    onClick={() =>
+                      type !== 'View' ? handleChecklist(option.label) : {}
+                    }
                     key={option.key}
                   />
                 }
@@ -252,7 +251,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
       <BottonButtons
         onClose={() => {
           handleClose();
-          resetSelectedConductor();
+          resetSelectedDeslocamento();
         }}
         onConfirm={formik.handleSubmit}
         disabled={type === 'View'}
