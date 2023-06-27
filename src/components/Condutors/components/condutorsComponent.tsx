@@ -71,6 +71,11 @@ const CondutorsComponent = (props: any) => {
     });
   }, [conductors]);
 
+  const handleCancelAction = () => {
+    setIsOpen('');
+    resetSelectedConductor();
+  };
+
   return (
     <ClientWrapper>
       <AddClientButton onClick={() => setIsOpen('Create')}>
@@ -85,24 +90,23 @@ const CondutorsComponent = (props: any) => {
       <CustomModal
         isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
         title="Adicionar novo condutor"
-        onCancel={() => setIsOpen('')}
-        onClose={() => setIsOpen('')}
+        onCancel={() => handleCancelAction()}
+        onClose={() => handleCancelAction()}
       >
         <ConductorForm
           {...{ loading, selectedConductor, resetSelectedConductor }}
           submit={isOpen === 'Create' ? submit : edit}
-          handleClose={() => setIsOpen('')}
+          handleClose={() => handleCancelAction()}
           type={isOpen}
         />
       </CustomModal>
 
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
-        onClose={() => setIsOpen('')}
+        onClose={() => handleCancelAction()}
         onConfirm={async () => {
           await deleteConductor(parseInt(selectedConductor?.id));
-          resetSelectedConductor();
-          setIsOpen('');
+          handleCancelAction();
         }}
         title={`Você irá remover o condutor "${selectedConductor?.nome}"`}
         description="Você tem certeza de que irá continuar com esta ação ? "

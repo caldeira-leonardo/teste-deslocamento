@@ -9,9 +9,12 @@ import { getClientsData } from '@/src/api/Deslocamento/clients';
 import { getVehiclesData } from '@/src/api/Deslocamento/vehicle';
 import { getConductorData } from '@/src/api/Deslocamento/conductor';
 import {
+  deleteDeslocamentoData,
   getDeslocamentoData,
+  patchDeslocamentoData,
   postDeslocamentoData,
 } from '@/src/api/Deslocamento/deslocamento';
+import { DeslocamentoUpdateProps } from '../components/deslocamentoUpdateForm';
 
 const Deslocamento = () => {
   const [clients, setClients] = useState<ClientProps[]>([]);
@@ -163,15 +166,31 @@ const Deslocamento = () => {
 
   const submit = async (values: DeslocamentoProps) => {
     await postDeslocamentoData(values);
+    getAllData();
+  };
+
+  const edit = async (values: DeslocamentoUpdateProps) => {
+    await patchDeslocamentoData(values);
+    resetSelectedDeslocamento();
+    getAllData();
+  };
+
+  const deleteDeslocamento = async (clientId: number) => {
+    await deleteDeslocamentoData(clientId);
+    getDeslocamentos();
+    getAllData();
+  };
+
+  const getAllData = () => {
+    getClients();
+    getVehicles();
+    getConductors();
     getDeslocamentos();
   };
 
   useEffect(() => {
     if (!wasCalled.current) {
-      getClients();
-      getVehicles();
-      getConductors();
-      getDeslocamentos();
+      getAllData();
       wasCalled.current = true;
     }
   }, []);
@@ -189,6 +208,8 @@ const Deslocamento = () => {
         selectedDeslocamento,
         submit,
         resetSelectedDeslocamento,
+        deleteDeslocamento,
+        edit,
       }}
     />
   );

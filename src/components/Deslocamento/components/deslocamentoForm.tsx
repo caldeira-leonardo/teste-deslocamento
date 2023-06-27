@@ -77,7 +77,6 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     checklistOptions,
     handleChecklist,
   } = props;
-  const [valueTeste, setValueTeste] = useState(0);
 
   const selectedClient = clientOptions.filter(
     (client) => client.key === selectedDeslocamento?.idCliente,
@@ -106,6 +105,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
         label: selectedVehicle?.label || '',
       },
       kmInicial: selectedDeslocamento?.kmInicial || 0,
+      kmFinal: selectedDeslocamento?.kmFinal || undefined,
       inicioDeslocamento: selectedDeslocamento?.inicioDeslocamento || '',
       fimDeslocamento: selectedDeslocamento?.fimDeslocamento || '',
       checkList: selectedDeslocamento?.checkList || '',
@@ -114,13 +114,26 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     },
     enableReinitialize: true,
     onSubmit: async (values: DeslocamentoProps) => {
-      const { idCliente, idCondutor, idVeiculo } = values;
-      await submit({
+      const {
+        idCliente,
+        idCondutor,
+        idVeiculo,
+        fimDeslocamento,
+        kmFinal,
+      } = values;
+      const newData = {
         ...values,
         idCliente: idCliente?.key,
         idCondutor: idCondutor?.key,
         idVeiculo: idVeiculo?.key,
-      });
+      };
+      delete newData.fimDeslocamento;
+      delete newData.kmFinal;
+      if (type !== 'Create') {
+        newData.fimDeslocamento = fimDeslocamento;
+        newData.kmFinal = kmFinal;
+      }
+      await submit(newData);
       formik.resetForm();
       handleClose();
     },
@@ -136,9 +149,6 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
   }, [checklistOptions]);
 
   useEffect(() => {
-    setValueTeste((value) => {
-      return value + 1;
-    });
     const checkedItems = selectedDeslocamento?.checkList
       .split(',')
       .filter((item) => item);
@@ -203,7 +213,30 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           type="fullDate"
           id="fimDeslocamento"
           formik={formik}
-          readOnly={type === 'View' || type === 'Create'}
+          readOnly={type === 'View'}
+          disabled={type === 'Create' || !selectedDeslocamento?.fimDeslocamento}
+        />
+        <Input
+          label="Km inicial"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          id="kmInicial"
+          formik={formik}
+          disabled={type === 'View'}
+        />
+        <Input
+          label="Km final"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          id="kmFinal"
+          formik={formik}
+          disabled={
+            !selectedDeslocamento?.fimDeslocamento ||
+            type === 'View' ||
+            type === 'Create'
+          }
         />
         <Input
           label="Motivo do deslocamento"

@@ -49,7 +49,9 @@ const Input = (props: InputProps) => {
   };
 
   const handleSelectOption = (value: string | number) => {
-    const selectedOption = options?.filter((option) => option.key === value)[0];
+    const selectedOption = options?.filter(
+      (option) => option?.key === value,
+    )[0];
     formik.setFieldValue(id, selectedOption);
   };
 
@@ -57,8 +59,8 @@ const Input = (props: InputProps) => {
     <InputWrapper>
       {type === 'select' && (
         <FormControl fullWidth>
-          <InputLabel color="secondary" id={formik.values[id].label}>
-            {props.label}
+          <InputLabel color="secondary" id={formik.values[id]?.label}>
+            {props?.label}
           </InputLabel>
           <Select
             {...formikProps}
@@ -66,15 +68,16 @@ const Input = (props: InputProps) => {
             onBlur={handleBlur}
             color="secondary"
             readOnly={props.readOnly}
-            labelId={formik.values[id].label}
+            labelId={formik.values[id]?.label}
             id={id}
-            label={props.label}
-            value={formik.values[id].key}
+            label={props?.label}
+            value={formik.values[id]?.key}
+            MenuProps={{ PaperProps: { style: { maxHeight: '200px' } } }}
             onChange={(e) => handleSelectOption(e.target.value)}
           >
             {options?.map((option) => (
-              <MenuItem key={option.key} value={option.key}>
-                {option.label}
+              <MenuItem key={option?.key} value={option?.key}>
+                {option?.label}
               </MenuItem>
             ))}
           </Select>
@@ -82,14 +85,15 @@ const Input = (props: InputProps) => {
       )}
       {type === 'fullDate' && (
         <CustomTimePicker
-          onChange={(e: any) =>
+          onChange={(e: any) => {
             formik.setFieldValue(
+              //corrigir, está retirando 3 horas a cada clique no horário remove logs
               id,
-              dayjs(e).format('YYYY-MM-DD[T]HH:mm:ss[.000Z]'),
-            )
-          }
+              dayjs(e).locale('pt-br').format('YYYY-MM-DD[T]HH:mm:ss[.000Z]'),
+            );
+          }}
           disabled={props.disabled}
-          label={props.label}
+          label={props?.label}
           readOnly={props.readOnly}
           format="DD/MM/YYYY LTS"
           value={formik.values[id] ? dayjs(formik.values[id]) : null}

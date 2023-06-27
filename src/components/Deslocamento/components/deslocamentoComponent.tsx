@@ -1,19 +1,16 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import moment from 'moment';
 import { ActionsWrapper } from '../../Condutors/components/styleCondutors';
 import { ActionIconComponent } from '@/src/utils/utils';
-import {
-  AddClientButton,
-  ClientWrapper,
-} from '../../Client/components/styleClient';
+import { ClientWrapper } from '../../Client/components/styleClient';
 import CustomizedTable from '../../elements/Table/Table';
 import ConfirmationModal from '../../elements/Modal/confirmationModal';
 import CustomModal from '../../elements/Modal/modal';
 import DeslocamentoForm from './deslocamentoForm';
 import { AddDeslocButton, HeaderButtons } from './styleDeslocamento';
+import DeslocamentoUpdateForm from './deslocamentoUpdateForm';
 
 export interface DeslocamentoProps {
   checkList: string;
@@ -38,10 +35,10 @@ const DeslocamentoComponent = (props: any) => {
     selectedDeslocamento,
     loading,
     submit,
-    edit,
     clients,
     vehicles,
     conductors,
+    edit,
     checklist,
     handleChecklist,
   } = props;
@@ -68,7 +65,9 @@ const DeslocamentoComponent = (props: any) => {
         condutor: selectedConductor?.label,
         veiculo: selectedVehicle?.label,
         inicioDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
-        fimDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
+        fimDeslocamento: desloc.fimDeslocamento
+          ? moment(desloc.fimDeslocamento).format('LLL')
+          : '',
         actions: (
           <ActionsWrapper>
             <ActionIconComponent
@@ -87,19 +86,43 @@ const DeslocamentoComponent = (props: any) => {
               title="Remover"
               placement="top"
             />
-            <ActionIconComponent
-              action={() => {
-                selectDeslocamento(desloc?.id, 'Edit');
-              }}
-              icon={<ModeEditOutlineIcon />}
-              title="Editar"
-              placement="top"
-            />
           </ActionsWrapper>
         ),
       };
     });
   }, [deslocamentos, clients, conductors, vehicles]);
+
+  const handleCancelAction = () => {
+    setIsOpen('');
+    resetSelectedDeslocamento();
+  };
+
+  const handleDeslocamentosOptions = () => {
+    const unfinishedDeslocaBasic = deslocamentos.filter(
+      (item: DeslocamentoProps) => !item.fimDeslocamento,
+    );
+
+    const unfinishedDesloca = unfinishedDeslocaBasic.map(
+      (item: DeslocamentoProps) => {
+        const selectedClient = clients.filter(
+          (user: any) => user.key === item.idCliente,
+        )[0];
+        const selectedConductor = conductors.filter(
+          (user: any) => user.key === item.idCondutor,
+        )[0];
+        const selectedVehicle = vehicles.filter(
+          (user: any) => user.key === item.idVeiculo,
+        )[0];
+
+        return {
+          key: item.id,
+          label: `${selectedClient?.label} | ${selectedConductor?.label} | ${selectedVehicle?.label}`,
+        };
+      },
+    );
+
+    return unfinishedDesloca;
+  };
 
   return (
     <ClientWrapper>
@@ -112,7 +135,7 @@ const DeslocamentoComponent = (props: any) => {
           Iniciar Deslocamento
         </AddDeslocButton>
         <AddDeslocButton
-          onClick={() => setIsOpen('Create')}
+          onClick={() => setIsOpen('Update')}
           color="secondary"
           sx={{
             marginLeft: { xs: 0, sm: '25px' },
@@ -130,38 +153,56 @@ const DeslocamentoComponent = (props: any) => {
       />
 
       <CustomModal
-        isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
-        title="Adicionar novo condutor"
-        onCancel={() => setIsOpen('')}
-        onClose={() => setIsOpen('')}
+        isOpen={['Create', 'View', 'Update'].includes(isOpen)}
+        title={
+          isOpen === 'Update'
+            ? 'Encerrar deslocamento'
+            : 'Adicionar novo deslocamento'
+        }
+        onCancel={() => handleCancelAction()}
+        onClose={() => handleCancelAction()}
       >
-        <DeslocamentoForm
-          {...{
-            loading,
-            selectedDeslocamento,
-            handleSelectDeslocamento,
-            resetSelectedDeslocamento,
-          }}
-          clientOptions={clients}
-          conductorOptions={conductors}
-          vehicleOptions={vehicles}
-          checklistOptions={checklist}
-          handleChecklist={handleChecklist}
-          submit={isOpen === 'Create' ? submit : edit}
-          handleClose={() => setIsOpen('')}
-          type={isOpen}
-        />
+        {isOpen !== 'Update' ? (
+          <DeslocamentoForm
+            {...{
+              loading,
+              selectedDeslocamento,
+              handleSelectDeslocamento,
+              resetSelectedDeslocamento,
+            }}
+            clientOptions={clients}
+            conductorOptions={conductors}
+            vehicleOptions={vehicles}
+            checklistOptions={checklist}
+            handleChecklist={handleChecklist}
+            submit={submit}
+            handleClose={() => handleCancelAction()}
+            type={isOpen}
+          />
+        ) : (
+          <DeslocamentoUpdateForm
+            {...{
+              loading,
+              selectedDeslocamento,
+              handleSelectDeslocamento,
+              resetSelectedDeslocamento,
+            }}
+            submit={edit}
+            handleClose={() => handleCancelAction()}
+            deslocOptions={handleDeslocamentosOptions()}
+            allDeslocamentos={deslocamentos}
+          />
+        )}
       </CustomModal>
 
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
-        onClose={() => setIsOpen('')}
+        onClose={() => handleCancelAction()}
         onConfirm={async () => {
           await deleteDeslocamento(parseInt(selectedDeslocamento?.id));
-          handleSelectDeslocamento();
-          setIsOpen('');
+          handleCancelAction();
         }}
-        title={`Você irá remover o condutor "${selectedDeslocamento?.nome}"`}
+        title={`Você irá remover o deslocamento "${selectedDeslocamento?.id}"`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
     </ClientWrapper>

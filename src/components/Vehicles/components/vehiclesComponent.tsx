@@ -83,6 +83,11 @@ const VehiclesComponent = (props: VehiclesComponentProps) => {
     });
   }, [vehicles]);
 
+  const handleCancelAction = () => {
+    setIsOpen('');
+    resetSelectVehicle();
+  };
+
   return (
     <ClientWrapper>
       <AddClientButton onClick={() => setIsOpen('Create')}>
@@ -98,25 +103,25 @@ const VehiclesComponent = (props: VehiclesComponentProps) => {
       <CustomModal
         isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
         title="Adicionar novo cliente"
-        onCancel={() => setIsOpen('')}
-        onClose={() => setIsOpen('')}
+        onCancel={() => handleCancelAction()}
+        onClose={() => handleCancelAction()}
       >
         <VehicleForm
           {...{ loading, selectedVehicle, resetSelectVehicle }}
           submit={isOpen === 'Create' ? submit : edit}
-          handleClose={() => setIsOpen('')}
+          handleClose={() => handleCancelAction()}
           type={isOpen}
         />
       </CustomModal>
 
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
-        onClose={() => setIsOpen('')}
+        onClose={() => handleCancelAction()}
         onConfirm={() => {
           deleteClient(String(selectedVehicle?.id));
-          setIsOpen('');
+          handleCancelAction();
         }}
-        title={`Você irá remover o veículo ${selectedVehicle?.marcaModelo}`}
+        title={`Você irá remover o veículo Placa: ${selectedVehicle?.placa}`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
     </ClientWrapper>

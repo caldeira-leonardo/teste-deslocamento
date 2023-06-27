@@ -1,6 +1,7 @@
 import baseurl from './baseurl';
 import { toast } from 'react-toastify';
 import { DeslocamentoProps } from '@/src/components/Deslocamento/components/deslocamentoComponent';
+import { DeslocamentoUpdateProps } from '@/src/components/Deslocamento/components/deslocamentoUpdateForm';
 
 export const getDeslocamentoData = async () => {
   return await baseurl
@@ -24,7 +25,7 @@ export const postDeslocamentoData = async (data: DeslocamentoProps) => {
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`Algo deu errado, tente mais tarde, ${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });
@@ -32,11 +33,10 @@ export const postDeslocamentoData = async (data: DeslocamentoProps) => {
     });
 };
 
-export const patchDeslocamentoData = async (data: DeslocamentoProps) => {
-  const { ...newData } = data;
-
+export const patchDeslocamentoData = async (data: DeslocamentoUpdateProps) => {
+  delete data.selectedDesloc;
   await baseurl
-    .put(`/Deslocamento/${data.id}`, { ...newData })
+    .put(`/Deslocamento/${data.id}/EncerrarDeslocamento`, { ...data })
     .then((res) => {
       toast('Deslocamento alterado com sucesso', {
         ...{ toastrProps },
@@ -45,7 +45,7 @@ export const patchDeslocamentoData = async (data: DeslocamentoProps) => {
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`Algo deu errado, tente mais tarde, ${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });
@@ -66,7 +66,7 @@ export const deleteDeslocamentoData = async (
       return res.data;
     })
     .catch((err) => {
-      toast('Algo deu errado, tente mais tarde', {
+      toast(`Algo deu errado, tente mais tarde, ${err.response.data}`, {
         ...{ toastrProps },
         type: 'error',
       });

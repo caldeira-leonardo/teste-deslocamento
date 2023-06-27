@@ -45,6 +45,11 @@ const ClientesComponent = (props: ClientesComponentProps) => {
     setIsOpen(type);
   };
 
+  const handleCancelAction = () => {
+    setIsOpen('');
+    resetSelectUser();
+  };
+
   const clientsData = useMemo(() => {
     return clients?.map((client) => {
       return {
@@ -96,20 +101,23 @@ const ClientesComponent = (props: ClientesComponentProps) => {
       <CustomModal
         isOpen={['Create', 'Edit', 'View'].includes(isOpen)}
         title="Adicionar novo cliente"
-        onCancel={() => setIsOpen('')}
-        onClose={() => setIsOpen('')}
+        onCancel={() => handleCancelAction()}
+        onClose={() => handleCancelAction()}
       >
         <ClientForm
           {...{ getUserLocationData, loading, selectedClient, resetSelectUser }}
           submit={isOpen === 'Create' ? submit : edit}
-          handleClose={() => setIsOpen('')}
+          handleClose={() => handleCancelAction()}
           type={isOpen}
         />
       </CustomModal>
       <ConfirmationModal
         isOpen={['Remove'].includes(isOpen)}
-        onClose={() => setIsOpen('')}
-        onConfirm={() => deleteClient(String(selectedClient?.id))}
+        onClose={() => handleCancelAction()}
+        onConfirm={() => {
+          deleteClient(String(selectedClient?.id));
+          handleCancelAction();
+        }}
         title={`Você irá remover o cliente ${selectedClient?.nome}`}
         description="Você tem certeza de que irá continuar com esta ação ? "
       />
