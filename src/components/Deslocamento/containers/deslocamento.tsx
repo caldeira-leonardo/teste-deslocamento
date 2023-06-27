@@ -46,13 +46,12 @@ const Deslocamento = () => {
   ]);
   const wasCalled = useRef(false);
 
-  const handleChecklist = (item: string) => {
-    //melhorar isso
+  const handleChecklist = (item: string, key: number) => {
     setChecklist((values) => {
       let itemFinded = false;
       const newValues = values.map((value) => {
         let newItem: any = {};
-        if (value.label === item) {
+        if (value.key === key) {
           itemFinded = true;
           newItem = {
             key: value.key,

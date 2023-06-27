@@ -8,7 +8,6 @@ import {
   MenuItem,
 } from '@mui/material';
 import { ErrorLabel, InputWrapper } from './styleInput';
-
 interface InputProps extends BaseTextFieldProps {
   formik?: any;
   id: string;
@@ -53,7 +52,7 @@ const Input = (props: InputProps) => {
 
   return (
     <InputWrapper>
-      {type === 'select' ? (
+      {type === 'select' && (
         <FormControl fullWidth>
           <InputLabel color="secondary" id={formik.values[id].label}>
             {props.label}
@@ -75,7 +74,8 @@ const Input = (props: InputProps) => {
             ))}
           </Select>
         </FormControl>
-      ) : (
+      )}
+      {(type === 'text' || !type) && (
         <TextField
           {...props}
           {...formikProps}

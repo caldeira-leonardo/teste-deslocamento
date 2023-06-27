@@ -31,7 +31,7 @@ interface DeslocamentoFormProps {
     label: string;
     key: number;
   }[];
-  handleChecklist(value: string): void;
+  handleChecklist(value: string, key: number): void;
 }
 
 export interface ConductorProps {
@@ -185,7 +185,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           variant="outlined"
           color="secondary"
           fullWidth
-          type="date"
+          type="fullDate"
           id="inicioDeslocamento"
           formik={formik}
           disabled={type === 'View'}
@@ -209,7 +209,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           multiline
           formik={formik}
           maxRows={4}
-          rows={2}
+          minRows={2}
           disabled={type === 'View'}
         />
         <h5 style={{ margin: 0, marginBottom: 0 }}>Checklist</h5>
@@ -222,7 +222,7 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
                   <Checkbox
                     color="secondary"
                     checked={option.checked}
-                    onClick={() => handleChecklist(option.label)}
+                    onClick={() => handleChecklist(option.label, option.key)}
                     key={option.key}
                   />
                 }

@@ -8,8 +8,8 @@ import theme from '../styles/theme';
 import createEmotionCache from '@/src/utils/createEmotionCache';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import moment from 'moment';
 import 'moment/locale/pt-br';
+import { MomentLocale } from '@/src/utils/utils';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -19,7 +19,10 @@ interface MyAppProps extends AppProps {
 
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  moment.locale('PT-BR');
+
+  React.useEffect(() => {
+    MomentLocale();
+  }, []);
 
   return (
     <CacheProvider value={emotionCache}>
