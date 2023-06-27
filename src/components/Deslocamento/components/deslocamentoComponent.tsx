@@ -101,10 +101,6 @@ const DeslocamentoComponent = (props: any) => {
     });
   }, [deslocamentos, clients, conductors, vehicles]);
 
-  useEffect(() => {
-    console.log('conductorsData', conductorsData); //TODO remove log
-  }, [conductorsData]);
-
   return (
     <ClientWrapper>
       <HeaderButtons

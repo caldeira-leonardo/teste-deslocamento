@@ -93,7 +93,6 @@ const Deslocamento = () => {
   };
 
   const handleChecklist = (item: string, newChecked?: boolean) => {
-    console.log('item', item); //TODO remove logs
     setChecklist((values) => {
       let itemFinded = false;
       const newValues = values.map((value) => {

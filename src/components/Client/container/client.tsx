@@ -74,7 +74,6 @@ const Client = () => {
       getClients();
       wasCalled.current = true;
     }
-    console.log('wasCalled.current', wasCalled.current); //TODO remove logs
   }, []);
 
   return (
