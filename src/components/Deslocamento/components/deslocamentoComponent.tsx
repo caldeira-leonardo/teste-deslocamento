@@ -54,8 +54,19 @@ const DeslocamentoComponent = (props: any) => {
 
   const conductorsData = useMemo(() => {
     return deslocamentos?.map((desloc: any) => {
+      const handleSelect = (id: any, options: any[]) => {
+        return options.filter((item: any) => item.key === id)[0];
+      };
+
+      const selectedClient = handleSelect(desloc.idCliente, clients);
+      const selectedConductor = handleSelect(desloc.idCondutor, conductors);
+      const selectedVehicle = handleSelect(desloc.idVeiculo, vehicles);
+
       return {
         ...desloc,
+        cliente: selectedClient.label,
+        condutor: selectedConductor.label,
+        veiculo: selectedVehicle.label,
         inicioDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
         fimDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
         actions: (
@@ -166,6 +177,10 @@ const tableColumns = [
   {
     key: 'condutor',
     label: 'Condutor',
+  },
+  {
+    key: 'veiculo',
+    label: 'Veículo',
   },
   {
     key: 'kmInicial',

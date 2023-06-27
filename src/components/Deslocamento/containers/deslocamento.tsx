@@ -8,7 +8,10 @@ import { VehiclesProps } from '../../Vehicles/components/vehiclesForm';
 import { getClientsData } from '@/src/api/Deslocamento/clients';
 import { getVehiclesData } from '@/src/api/Deslocamento/vehicle';
 import { getConductorData } from '@/src/api/Deslocamento/conductor';
-import { getDeslocamentoData } from '@/src/api/Deslocamento/deslocamento';
+import {
+  getDeslocamentoData,
+  postDeslocamentoData,
+} from '@/src/api/Deslocamento/deslocamento';
 
 const Deslocamento = () => {
   const [clients, setClients] = useState<ClientProps[]>([]);
@@ -111,6 +114,11 @@ const Deslocamento = () => {
     setDeslocamentos(deslocamentosData);
   };
 
+  const submit = async (values: DeslocamentoProps) => {
+    await postDeslocamentoData(values);
+    getDeslocamentos();
+  };
+
   useEffect(() => {
     if (!wasCalled.current) {
       getClients();
@@ -132,6 +140,7 @@ const Deslocamento = () => {
         handleChecklist,
         deslocamentos,
         selectedDeslocamento,
+        submit,
       }}
     />
   );

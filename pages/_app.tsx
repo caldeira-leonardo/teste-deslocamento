@@ -10,6 +10,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'moment/locale/pt-br';
 import { MomentLocale } from '@/src/utils/utils';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -29,23 +31,25 @@ export default function MyApp(props: MyAppProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <Global styles={styles} />
-        <CssBaseline />
-        <Component {...pageProps} />
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
-      </ThemeProvider>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <ThemeProvider theme={theme}>
+          <Global styles={styles} />
+          <CssBaseline />
+          <Component {...pageProps} />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+        </ThemeProvider>
+      </LocalizationProvider>
     </CacheProvider>
   );
 }

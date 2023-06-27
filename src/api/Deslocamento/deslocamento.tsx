@@ -1,6 +1,6 @@
-import { VehiclesProps } from '@/src/components/Vehicles/components/vehiclesForm';
 import baseurl from './baseurl';
 import { toast } from 'react-toastify';
+import { DeslocamentoProps } from '@/src/components/Deslocamento/components/deslocamentoComponent';
 
 export const getDeslocamentoData = async () => {
   return await baseurl
@@ -13,7 +13,7 @@ export const getDeslocamentoData = async () => {
     });
 };
 
-export const postDeslocamentoData = async (data: VehiclesProps) => {
+export const postDeslocamentoData = async (data: DeslocamentoProps) => {
   await baseurl
     .post(`/Deslocamento/IniciarDeslocamento`, data)
     .then((res) => {
@@ -32,7 +32,7 @@ export const postDeslocamentoData = async (data: VehiclesProps) => {
     });
 };
 
-export const patchDeslocamentoData = async (data: VehiclesProps) => {
+export const patchDeslocamentoData = async (data: DeslocamentoProps) => {
   const { ...newData } = data;
 
   await baseurl

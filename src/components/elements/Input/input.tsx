@@ -7,7 +7,9 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-import { ErrorLabel, InputWrapper } from './styleInput';
+import { CustomTimePicker, ErrorLabel, InputWrapper } from './styleInput';
+import { renderTimeViewClock } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 interface InputProps extends BaseTextFieldProps {
   formik?: any;
   id: string;
@@ -60,6 +62,7 @@ const Input = (props: InputProps) => {
           <Select
             {...formikProps}
             variant="outlined"
+            onBlur={handleBlur}
             color="secondary"
             labelId={formik.values[id].label}
             id={id}
@@ -75,7 +78,25 @@ const Input = (props: InputProps) => {
           </Select>
         </FormControl>
       )}
-      {(type === 'text' || !type) && (
+      {type === 'fullDate' && (
+        <CustomTimePicker
+          onChange={(e: any) =>
+            formik.setFieldValue(
+              id,
+              dayjs(e).format('YYYY-MM-DD[T]HH:mm:ss[.000Z]'),
+            )
+          }
+          label={props.label}
+          format="DD/MM/YYYY LTS"
+          value={formik.values[id].key}
+          viewRenderers={{
+            hours: renderTimeViewClock,
+            minutes: renderTimeViewClock,
+            seconds: renderTimeViewClock,
+          }}
+        />
+      )}
+      {(type === 'text' || type === 'date' || !type) && (
         <TextField
           {...props}
           {...formikProps}

@@ -21,7 +21,11 @@ const DashboardLayout = (props: DashboardLayoutProps) => {
       <DashboardContainer>
         <DashboardTitle>{title}</DashboardTitle>
         <Divider />
-        <DashboardChildren>{children}</DashboardChildren>
+        <DashboardChildren
+          sx={{ width: { xs: 'inherit', md: 'calc(100vw - 315px)' } }}
+        >
+          {children}
+        </DashboardChildren>
       </DashboardContainer>
     </DashboardWrapper>
   );
