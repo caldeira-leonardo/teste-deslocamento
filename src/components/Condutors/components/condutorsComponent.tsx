@@ -13,7 +13,6 @@ import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ConductorForm from './condutorsForm';
 import moment from 'moment';
-import 'moment/locale/pt-br';
 
 const CondutorsComponent = (props: any) => {
   const {
@@ -27,7 +26,6 @@ const CondutorsComponent = (props: any) => {
     handleSelectConductor,
   } = props;
   const [isOpen, setIsOpen] = useState('');
-  moment.locale('PT-BR');
 
   const selectConductor = (id: string, type: string) => {
     handleSelectConductor(id);

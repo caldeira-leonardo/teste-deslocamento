@@ -10,7 +10,7 @@ import {
 import { ErrorLabel, InputWrapper } from './styleInput';
 
 interface InputProps extends BaseTextFieldProps {
-  formik: any;
+  formik?: any;
   id: string;
   type?: string;
   options?: {

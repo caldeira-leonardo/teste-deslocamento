@@ -13,6 +13,21 @@ import CustomizedTable from '../../elements/Table/Table';
 import ConfirmationModal from '../../elements/Modal/confirmationModal';
 import CustomModal from '../../elements/Modal/modal';
 import DeslocamentoForm from './deslocamentoForm';
+import { AddDeslocButton, HeaderButtons } from './styleDeslocamento';
+
+export interface DeslocamentoProps {
+  checkList: string;
+  fimDeslocamento: string;
+  id: number;
+  idCliente: number;
+  idCondutor: number;
+  idVeiculo: number;
+  inicioDeslocamento: string;
+  kmFinal: null;
+  kmInicial: number;
+  motivo: string;
+  observacao: string;
+}
 
 const DeslocamentoComponent = (props: any) => {
   const {
@@ -27,6 +42,8 @@ const DeslocamentoComponent = (props: any) => {
     clients,
     vehicles,
     conductors,
+    checklist,
+    handleChecklist,
   } = props;
   const [isOpen, setIsOpen] = useState('');
 
@@ -36,17 +53,16 @@ const DeslocamentoComponent = (props: any) => {
   };
 
   const conductorsData = useMemo(() => {
-    return deslocamentos?.map((conductor: any) => {
+    return deslocamentos?.map((desloc: any) => {
       return {
-        ...conductor,
-        vencimentoHabilitacao: moment(conductor.vencimentoHabilitacao).format(
-          'LL',
-        ),
+        ...desloc,
+        inicioDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
+        fimDeslocamento: moment(desloc.inicioDeslocamento).format('LLL'),
         actions: (
           <ActionsWrapper>
             <ActionIconComponent
               action={() => {
-                selectDeslocamento(conductor?.id, 'View');
+                selectDeslocamento(desloc?.id, 'View');
               }}
               icon={<VisibilityIcon />}
               title="Visualizar"
@@ -54,7 +70,7 @@ const DeslocamentoComponent = (props: any) => {
             />
             <ActionIconComponent
               action={() => {
-                selectDeslocamento(conductor?.id, 'Remove');
+                selectDeslocamento(desloc?.id, 'Remove');
               }}
               icon={<DeleteForeverIcon />}
               title="Remover"
@@ -62,7 +78,7 @@ const DeslocamentoComponent = (props: any) => {
             />
             <ActionIconComponent
               action={() => {
-                selectDeslocamento(conductor?.id, 'Edit');
+                selectDeslocamento(desloc?.id, 'Edit');
               }}
               icon={<ModeEditOutlineIcon />}
               title="Editar"
@@ -74,11 +90,31 @@ const DeslocamentoComponent = (props: any) => {
     });
   }, [deslocamentos]);
 
+  useEffect(() => {
+    console.log('conductorsData', conductorsData); //TODO remove log
+  }, [conductorsData]);
+
   return (
     <ClientWrapper>
-      <AddClientButton onClick={() => setIsOpen('Create')}>
-        Adicionar Deslocamento
-      </AddClientButton>
+      <HeaderButtons
+        sx={{
+          flexDirection: { xs: 'column', sm: 'row' },
+        }}
+      >
+        <AddDeslocButton onClick={() => setIsOpen('Create')}>
+          Iniciar Deslocamento
+        </AddDeslocButton>
+        <AddDeslocButton
+          onClick={() => setIsOpen('Create')}
+          color="secondary"
+          sx={{
+            marginLeft: { xs: 0, sm: '25px' },
+            marginTop: { xs: '25px', sm: 0 },
+          }}
+        >
+          Encerrar Deslocamento
+        </AddDeslocButton>
+      </HeaderButtons>
 
       <CustomizedTable
         columns={tableColumns}
@@ -97,6 +133,8 @@ const DeslocamentoComponent = (props: any) => {
           clientOptions={clients}
           conductorOptions={conductors}
           vehicleOptions={vehicles}
+          checklistOptions={checklist}
+          handleChecklist={handleChecklist}
           submit={isOpen === 'Create' ? submit : edit}
           handleClose={() => setIsOpen('')}
           type={isOpen}
@@ -154,7 +192,7 @@ const tableColumns = [
     label: 'Motivo',
   },
   {
-    key: 'observcoes',
+    key: 'observacao',
     label: 'Observcões',
   },
   {

@@ -5,6 +5,8 @@ import { useFormik } from 'formik';
 import BottonButtons from '../../elements/Modal/bottomButtons';
 import moment from 'moment';
 import { ConductorFormWrapper } from '../../Condutors/components/styleCondutors';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { ChecklistWrapper } from './styleDeslocamento';
 
 interface DeslocamentoFormProps {
   selectedConductor?: ConductorProps;
@@ -24,6 +26,12 @@ interface DeslocamentoFormProps {
     key: number | string;
     label: string;
   }[];
+  checklistOptions: {
+    checked: boolean;
+    label: string;
+    key: number;
+  }[];
+  handleChecklist(value: string): void;
 }
 
 export interface ConductorProps {
@@ -66,6 +74,8 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     clientOptions,
     conductorOptions,
     vehicleOptions,
+    checklistOptions,
+    handleChecklist,
   } = props;
 
   const formik = useFormik<DeslocamentoProps>({
@@ -82,11 +92,11 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
         key: '',
         label: '',
       },
-      inicioDeslocamento: '',
       kmInicial: 0,
+      inicioDeslocamento: moment().format('YYYY-MM-DD'),
+      checkList: '',
       motivo: '',
       observacao: '',
-      checkList: '',
       // nome: selectedConductor?.nome || '',
       // numeroHabilitacao: selectedConductor?.numeroHabilitacao || '',
       // catergoriaHabilitacao: selectedConductor?.catergoriaHabilitacao || '',
@@ -133,15 +143,11 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
     },
   });
 
-  useEffect(() => {
-    console.log('formik', formik); //TODO remove log
-  }, [formik]);
-
   return (
     <>
       <ConductorFormWrapper>
         <Input
-          label="Nome"
+          label="Cliente"
           variant="outlined"
           color="secondary"
           fullWidth
@@ -152,64 +158,79 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
           disabled={['View', 'Edit'].includes(type)}
         />
         <Input
-          label="Numero da habilitação"
+          label="Condutor"
           variant="outlined"
           color="secondary"
           fullWidth
           id="idCondutor"
           formik={formik}
+          type="select"
+          options={conductorOptions}
           disabled={['View', 'Edit'].includes(type)}
         />
         <Input
-          label="Categoria da habilitação"
+          label="Veiculo"
           variant="outlined"
           color="secondary"
           fullWidth
           id="idVeiculo"
           formik={formik}
+          type="select"
+          options={vehicleOptions}
           disabled={type === 'View'}
           sx={{ marginBottom: { xs: '10px', md: '0' } }}
         />
         <Input
-          label="Vencimento da habilitação"
+          label="início do deslocamento"
           variant="outlined"
           color="secondary"
           fullWidth
           type="date"
-          id="kmInicial"
+          id="inicioDeslocamento"
           formik={formik}
           disabled={type === 'View'}
         />
+
         <Input
-          label="Vencimento da habilitação"
+          label="Motivo do deslocamento"
           variant="outlined"
           color="secondary"
           fullWidth
-          type="date"
           id="motivo"
           formik={formik}
           disabled={type === 'View'}
         />
         <Input
-          label="Vencimento da habilitação"
+          label="Observações"
           variant="outlined"
           color="secondary"
           fullWidth
-          type="date"
           id="observacao"
+          multiline
           formik={formik}
+          maxRows={4}
+          rows={2}
           disabled={type === 'View'}
         />
-        <Input
-          label="Vencimento da habilitação"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          type="date"
-          id="checkList"
-          formik={formik}
-          disabled={type === 'View'}
-        />
+        <h5 style={{ margin: 0, marginBottom: 0 }}>Checklist</h5>
+        <ChecklistWrapper>
+          {checklistOptions.map((option) => {
+            return (
+              <FormControlLabel
+                key={option.key}
+                control={
+                  <Checkbox
+                    color="secondary"
+                    checked={option.checked}
+                    onClick={() => handleChecklist(option.label)}
+                    key={option.key}
+                  />
+                }
+                label={option.label}
+              />
+            );
+          })}
+        </ChecklistWrapper>
       </ConductorFormWrapper>
       <BottonButtons
         onClose={() => {

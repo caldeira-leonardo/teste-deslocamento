@@ -38,7 +38,7 @@ const ConductorForm = (props: ConductorFormProps) => {
       numeroHabilitacao: selectedConductor?.numeroHabilitacao || '',
       catergoriaHabilitacao: selectedConductor?.catergoriaHabilitacao || '',
       vencimentoHabilitacao: moment(
-        selectedConductor?.vencimentoHabilitacao || '',
+        selectedConductor?.vencimentoHabilitacao,
       ).format('YYYY-MM-DD'),
       id: selectedConductor?.id || '',
     },
