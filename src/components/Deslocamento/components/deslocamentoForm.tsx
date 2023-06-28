@@ -5,7 +5,6 @@ import BottonButtons from '../../elements/Modal/bottomButtons';
 import { ConductorFormWrapper } from '../../Condutors/components/styleCondutors';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import { ChecklistWrapper } from './styleDeslocamento';
-import * as Yup from 'yup';
 
 interface DeslocamentoFormProps {
   selectedDeslocamento?: DeslocamentoProps;
@@ -43,26 +42,26 @@ interface DeslocamentoProps {
   motivo?: string;
   observacao?: string;
   idCondutor:
-  | string
-  | number
-  | {
-    key: number | string;
-    label: string;
-  };
+    | string
+    | number
+    | {
+        key: number | string;
+        label: string;
+      };
   idVeiculo:
-  | string
-  | number
-  | {
-    key: number | string;
-    label: string;
-  };
+    | string
+    | number
+    | {
+        key: number | string;
+        label: string;
+      };
   idCliente:
-  | string
-  | number
-  | {
-    key: number | string;
-    label: string;
-  };
+    | string
+    | number
+    | {
+        key: number | string;
+        label: string;
+      };
 }
 
 const DeslocamentoForm = (props: DeslocamentoFormProps) => {

@@ -164,8 +164,8 @@ const DeslocamentoComponent = (props: any) => {
           isOpen === 'Update'
             ? 'Encerrar deslocamento'
             : isOpen === 'Create'
-              ? 'Adicionar novo deslocamento'
-              : 'Deslocamento'
+            ? 'Adicionar novo deslocamento'
+            : 'Deslocamento'
         }
         onCancel={() => handleCancelAction()}
         onClose={() => handleCancelAction()}

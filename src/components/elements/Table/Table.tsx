@@ -11,7 +11,7 @@ import _ from 'lodash';
 
 interface CustomizedTableProps {
   rows: any;
-  columns: { key: string; label: string; }[];
+  columns: { key: string; label: string }[];
   onSelect(id: string): void;
   minWidth?: number;
 }

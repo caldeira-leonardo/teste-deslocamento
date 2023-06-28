@@ -14,7 +14,7 @@ const meta: Meta<typeof Input> = {
   },
   decorators: [
     (Story, options) => {
-      const formik = useFormik<{ name: string; key: number; }>({
+      const formik = useFormik<{ name: string; key: number }>({
         initialValues: {
           key: 0,
           name: '',
@@ -23,7 +23,7 @@ const meta: Meta<typeof Input> = {
           key: Yup.number(),
           name: Yup.string().required('Mandatory field'),
         }),
-        onSubmit: async (values: { name: string; key: number; }) => {
+        onSubmit: async (values: { name: string; key: number }) => {
           console.log('Form sended', values);
           formik.resetForm();
         },
