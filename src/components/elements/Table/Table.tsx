@@ -43,7 +43,7 @@ const CustomizedTable = ({
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} data-testid="main-table">
         <Table sx={{ minWidth: minWidth || 700 }}>
           <TableHead>
             <TableRow>

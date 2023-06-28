@@ -3,9 +3,7 @@ import DashboardLayout from '@/src/components/DashboardLayout/dashboardLayout';
 
 const Home: NextPage = () => {
   return (
-    <DashboardLayout title="Instruções">
-      <h2 style={{ textAlign: 'center' }}>Instruções da aplicação</h2>
-
+    <DashboardLayout title="Instruções da aplicação">
       <ul>
         <li>
           O menu ao lado foi feito para a navegação dentro de cada uma das rotas
@@ -43,6 +41,11 @@ const Home: NextPage = () => {
           Na página da documentação é possível testar os elementos dos
           componentes antes de utiliza-los, deixando mais facil o entendimento
           da necessidade de cada propriedade do mesmo
+        </li>
+        <li>
+          Foram implementados alguns testes da página de deslocamento para
+          verificar se algumas funcionalidades estão corretas e aparecendo em
+          tela
         </li>
       </ul>
     </DashboardLayout>

@@ -50,7 +50,7 @@ const DeslocamentoComponent = (props: any) => {
   };
 
   const conductorsData = useMemo(() => {
-    return deslocamentos?.map((desloc: any) => {
+    return deslocamentos?.map((desloc: any, i: number) => {
       const handleSelect = (id: any, options: any[]) => {
         return options.filter((item: any) => item.key === id)[0];
       };
@@ -85,6 +85,9 @@ const DeslocamentoComponent = (props: any) => {
               icon={<DeleteForeverIcon />}
               title="Remover"
               placement="top"
+              data-testId={
+                i === deslocamentos.length - 1 ? 'removerItemTabela' : ''
+              }
             />
           </ActionsWrapper>
         ),
@@ -131,7 +134,10 @@ const DeslocamentoComponent = (props: any) => {
           flexDirection: { xs: 'column', sm: 'row' },
         }}
       >
-        <AddDeslocButton onClick={() => setIsOpen('Create')}>
+        <AddDeslocButton
+          onClick={() => setIsOpen('Create')}
+          data-testid="iniciarDeslocamento"
+        >
           Iniciar Deslocamento
         </AddDeslocButton>
         <AddDeslocButton
@@ -157,7 +163,9 @@ const DeslocamentoComponent = (props: any) => {
         title={
           isOpen === 'Update'
             ? 'Encerrar deslocamento'
-            : 'Adicionar novo deslocamento'
+            : isOpen === 'Create'
+              ? 'Adicionar novo deslocamento'
+              : 'Deslocamento'
         }
         onCancel={() => handleCancelAction()}
         onClose={() => handleCancelAction()}

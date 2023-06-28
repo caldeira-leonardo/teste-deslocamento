@@ -22,6 +22,7 @@ const BottonButtons = ({
         onClick={onConfirm}
         style={{ marginLeft: '20px' }}
         disabled={disabled}
+        data-testId="modal-confirmation"
       >
         Confirmar
       </Button>

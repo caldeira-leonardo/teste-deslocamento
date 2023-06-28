@@ -19,16 +19,14 @@ interface ActionIconProps {
   | 'top';
   action(): void;
   icon: any;
+  ['data-testId']?: string;
 }
 
-export const ActionIconComponent = ({
-  action,
-  icon,
-  placement,
-  title,
-}: ActionIconProps) => {
+export const ActionIconComponent = (props: ActionIconProps) => {
+  const { action, icon } = props;
+
   return (
-    <Tooltip title={title} placement={placement}>
+    <Tooltip {...props}>
       <ActionIcon onClick={action}>{icon}</ActionIcon>
     </Tooltip>
   );
