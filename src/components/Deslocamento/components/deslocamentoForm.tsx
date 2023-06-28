@@ -94,8 +94,8 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
   const formik = useFormik<DeslocamentoProps>({
     initialValues: {
       idCliente: {
-        key: selectedClient?.key || undefined,
-        label: selectedClient?.label || undefined,
+        key: selectedClient?.key || '',
+        label: selectedClient?.label || '',
       },
       idCondutor: {
         key: selectedConductor?.key || '',
@@ -113,59 +113,6 @@ const DeslocamentoForm = (props: DeslocamentoFormProps) => {
       motivo: selectedDeslocamento?.motivo || '',
       observacao: selectedDeslocamento?.observacao || '',
     },
-    validationSchema: Yup.object().shape({
-      idCliente: Yup.object()
-        .required()
-        .shape({
-          key: Yup.string(),
-          label: Yup.string(),
-        })
-        .test({
-          test: (value) => value?.key,
-          message: 'campo obrigatório',
-        }),
-      idCondutor: Yup.object()
-        .required()
-        .shape({
-          key: Yup.string(),
-          label: Yup.string(),
-        })
-        .test({
-          test: (value) => value?.key,
-          message: 'campo obrigatório',
-        }),
-      idVeiculo: Yup.object()
-        .required()
-        .shape({
-          key: Yup.string(),
-          label: Yup.string(),
-        })
-        .test({
-          test: (value) => value?.key,
-          message: 'campo obrigatório',
-        }),
-      // numeroHabilitacao: Yup.string()
-      //   .matches(/^\d+$/, 'Digite somente números')
-      //   .required('Campo obligatorio'),
-      // catergoriaHabilitacao: Yup.string().required('Campo obligatorio'),
-      // vencimentoHabilitacao: Yup.string().test({
-      //   test: (value) => {
-      //     return (
-      //       moment(value).isSame(
-      //         moment(selectedConductor?.vencimentoHabilitacao).format(
-      //           'YYYY-MM-DD',
-      //         ),
-      //       ) ||
-      //       moment(value).isAfter(
-      //         moment(selectedConductor?.vencimentoHabilitacao).format(
-      //           'YYYY-MM-DD',
-      //         ),
-      //       )
-      //     );
-      //   },
-      //   message: 'O vencimento não pode ser anterior ao vencimento atual',
-      // }),
-    }),
     enableReinitialize: true,
     onSubmit: async (values: DeslocamentoProps) => {
       const {
